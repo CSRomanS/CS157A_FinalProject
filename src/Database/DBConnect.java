@@ -3,6 +3,7 @@ import java.sql.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
+import org.json.simple.JSONObject;
 
 public class DBConnect {
     // connection URL
@@ -38,6 +39,19 @@ public class DBConnect {
         return connection;
     }
 
+    public static void createAccount(Connection con) throws java.sql.SQLException{
+        String FirstName = "FirstName";
+        String LastName = "LastName";
+        String ALineOne = "1234 Test St";
+        String City = "tCity";
+        String State = "CA";
+        int ZipCode = 94000;
+        Statement statement = con.createStatement();
+        statement.executeUpdate("INSERT INTO Users(FirstName, LastName, AddressLineOne, City, State, ZipCode)" +
+                                    "VALUES ('"+FirstName+"','"+LastName+"','"+ALineOne+"','"+City+"','"+State+"','"+ZipCode+"')");
+    }
+
+
     /**
      * Creates the database for the first time
      */
@@ -60,6 +74,10 @@ public class DBConnect {
                     statement.executeUpdate(i);
                 }
             }
+
+            // close
+            statement.close();
+            connection.close();
         } catch (SQLException e){
             System.out.println("Error connecting to database");
             e.printStackTrace();
