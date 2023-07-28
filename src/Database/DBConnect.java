@@ -40,6 +40,12 @@ public class DBConnect {
     }
 
     public static void createAccount(Connection con) throws java.sql.SQLException{
+        // Logins
+        String userName = "UserNameTest";
+        String passWord = "pass";
+        String salt = "rand"; // replace with random string generator
+
+        // User Info
         String FirstName = "FirstName";
         String LastName = "LastName";
         String ALineOne = "1234 Test St";
@@ -48,7 +54,12 @@ public class DBConnect {
         int ZipCode = 94000;
         Statement statement = con.createStatement();
         statement.executeUpdate("INSERT INTO Users(FirstName, LastName, AddressLineOne, City, State, ZipCode)" +
-                                    "VALUES ('"+FirstName+"','"+LastName+"','"+ALineOne+"','"+City+"','"+State+"','"+ZipCode+"')");
+                                    "VALUES ('"+FirstName+"','"+LastName+"','"+ALineOne+"','"+City+"','"+State+"','"+ZipCode+"')",
+                                    Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = statement.getGeneratedKeys();
+        int userID=rs.getInt(1);
+        statement.executeUpdate("INSERT INTO Logins(UserName, Password, Salt, UserID)"+
+                                "VALUES ('"+userName+"','"+passWord+"','"+salt+"','"+userID"')");
     }
 
 
