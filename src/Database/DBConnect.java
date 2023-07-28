@@ -3,7 +3,6 @@ import java.sql.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
-import org.json.simple.JSONObject;
 
 public class DBConnect {
     // connection URL
@@ -52,14 +51,18 @@ public class DBConnect {
         String City = "tCity";
         String State = "CA";
         int ZipCode = 94000;
+
+        // SQL Statements
         Statement statement = con.createStatement();
         statement.executeUpdate("INSERT INTO Users(FirstName, LastName, AddressLineOne, City, State, ZipCode)" +
                                     "VALUES ('"+FirstName+"','"+LastName+"','"+ALineOne+"','"+City+"','"+State+"','"+ZipCode+"')",
                                     Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = statement.getGeneratedKeys();
+        rs.next();
         int userID=rs.getInt(1);
-        statement.executeUpdate("INSERT INTO Logins(UserName, Password, Salt, UserID)"+
-                                "VALUES ('"+userName+"','"+passWord+"','"+salt+"','"+userID"')");
+        statement.executeUpdate("INSERT INTO Logins(UserName, PassWord, Salt, UserID)"+
+                                "VALUES ('"+userName+"','"+passWord+"','"+salt+"','"+userID+"')");
+        statement.close();
     }
 
 
