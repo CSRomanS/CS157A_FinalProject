@@ -38,33 +38,37 @@ public class DBConnect {
         return connection;
     }
 
-    public static void createAccount(Connection con) throws java.sql.SQLException{
-        // Logins
-        String userName = "UserNameTest";
-        String passWord = "pass";
-        String salt = "rand"; // replace with random string generator
-
-        // User Info
-        String FirstName = "FirstName";
-        String LastName = "LastName";
-        String ALineOne = "1234 Test St";
-        String City = "tCity";
-        String State = "CA";
-        int ZipCode = 94000;
-
+    public static boolean createAccount(Connection con, String username, String pass, String fName, String lName, String aLine, String city, String state, int zip){
         // SQL Statements
-        Statement statement = con.createStatement();
-        statement.executeUpdate("INSERT INTO Users(FirstName, LastName, AddressLineOne, City, State, ZipCode)" +
-                                    "VALUES ('"+FirstName+"','"+LastName+"','"+ALineOne+"','"+City+"','"+State+"','"+ZipCode+"')",
-                                    Statement.RETURN_GENERATED_KEYS);
-        ResultSet rs = statement.getGeneratedKeys();
-        rs.next();
-        int userID=rs.getInt(1);
-        statement.executeUpdate("INSERT INTO Logins(UserName, PassWord, Salt, UserID)"+
-                                "VALUES ('"+userName+"','"+passWord+"','"+salt+"','"+userID+"')");
-        statement.close();
+        try {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("INSERT INTO Users(FirstName, LastName, AddressLineOne, City, State, ZipCode)" +
+                            "VALUES ('" + fName + "','" + lName + "','" + aLine + "','" + city + "','" + state + "','" + zip + "')",
+                    Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
+            int userID = rs.getInt(1);
+            statement.executeUpdate("INSERT INTO Logins(UserName, PassWord, UserID)" +
+                    "VALUES ('" + username + "','" + pass + "','" + userID + "')");
+            statement.close();
+            return true;
+        } catch (java.sql.SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
+    public static boolean createReview(Connection con, int sRating, String rText, String picture, int authID, int itemID){
+        try {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("INSERT INTO Reviews(StarRating, ReviewText, Picture, AuthorID, ItemID)" +
+                            "VALUES ('" + sRating + "','" + rText + "','" + picture + "','" + authID + "','" + itemID + "')");
+            return true;
+        } catch (java.sql.SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 
     /**
      * Creates the database for the first time
