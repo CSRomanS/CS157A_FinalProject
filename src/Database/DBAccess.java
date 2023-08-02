@@ -193,9 +193,21 @@ public class DBAccess {
             String state = (String) reSet.getObject(3);
             Integer zip = (Integer) reSet.getObject(4);
 
+            reSet = statement.executeQuery("SELECT Tax "+
+                    "FROM Taxes "+
+                    "WHERE State='" + state + "';");
+            if(!reSet.next()) { // rollback, close, and return false if result is empty
+                con.rollback();
+                statement.close();
+                reSet.close();
+                con.close();
+                return false;
+            }
+            float taxRate = reSet.getFloat(1);
+
             // insert info into Orders
-            statement.executeUpdate("INSERT INTO Orders(Cost, AddressLineOne, City, State, ZipCode, UserID)" +
-                            "VALUES ('" + cartSum + "','" + addressOne + "','" + city + "','" + state + "','" + zip + "','" + userID + "')",
+            statement.executeUpdate("INSERT INTO Orders(Cost, Taxes, AddressLineOne, City, State, ZipCode, UserID)" +
+                            "VALUES ('" + cartSum + "','" + cartSum*taxRate + "','" + addressOne + "','" + city + "','" + state + "','" + zip + "','" + userID + "')",
                     Statement.RETURN_GENERATED_KEYS);
 
             // Get generated orderID
@@ -218,7 +230,7 @@ public class DBAccess {
 
             // Clear the user's shopping cart
             statement.executeUpdate("DELETE FROM ShoppingCarts " +
-                    "WHERE UserID='" + userID + "';");
+                                        "WHERE UserID='" + userID + "';");
 
             con.commit(); // commits the statements
 

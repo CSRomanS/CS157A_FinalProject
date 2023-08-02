@@ -8,8 +8,8 @@ public class Main {
             //DBAccess.createReview(4, "Review Text Test", "NULL", 1, 1);
             //DBAccess.createHelpful(1, 1, true);
             //DBAccess.addToCart(1, 4, 5);
-            //DBAccess.placeOrder(1);
-           System.out.println(DBAccess.verifyLogin("userTest", "passTest"));
+            DBAccess.placeOrder(1);
+           //System.out.println(DBAccess.verifyLogin("userTest", "passTest"));
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
