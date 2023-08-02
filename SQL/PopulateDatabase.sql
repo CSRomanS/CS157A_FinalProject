@@ -37,6 +37,10 @@ INSERT INTO Users(UserID, FirstName, LastName, AddressLineOne, City, State, ZipC
 VALUES 
 		('1', 'fName', 'lName', 'Line 1 Address', 'tCity', 'tState', '94000');
         
+INSERT INTO Logins(UserName, `PassWord`, UserID)
+VALUES
+		('userTest', 'passTest', '1');
+        
 INSERT INTO ShoppingCarts(UserID, ItemID, ItemCount)
 VALUES
 		(1, 2, 3),

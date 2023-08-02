@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+/**
+ * Holds an item in a cart
+ */
 class CartItem{
     int itemID;
     int itemCount;
@@ -29,9 +32,35 @@ class CartItem{
 }
 
 public class DBAccess {
+    /**
+     * Verifies a username/password combo
+     * @param username string containing the username
+     * @param password string containing the password
+     * @return -1 on failure (incorrect password/username, sqlerror), the userID on success
+     */
+    public static int verifyLogin(String username, String password){
+        Connection con = DBConnect.Connect();
+        if(con == null) return -1;
+        try {
+            Statement statement = con.createStatement();
+            statement.executeQuery("SELECT UserID FROM logins " +
+                                        "WHERE username='"+username+"' AND PassWord='"+ password+"';");
+            ResultSet rs = statement.getResultSet();
+            if(!rs.next()) return -1; // return -1 if no match found
+            int userID = rs.getInt(1); // get userID
+            statement.close();
+            con.close();
+            return userID;
+        } catch (java.sql.SQLException e){
+            System.err.println(e.getMessage());
+            return -1;
+        }
+    }
+
     public static boolean createAccount(String username, String pass, String fName, String lName, String aLine, String city, String state, int zip){
         // SQL Statements
         Connection con = DBConnect.Connect();
+        if(con == null) return false;
         try {
             con.setAutoCommit(false);
             Statement statement = con.createStatement();
@@ -43,8 +72,11 @@ public class DBAccess {
             int userID = rs.getInt(1);
             statement.executeUpdate("INSERT INTO Logins(UserName, PassWord, UserID)" +
                     "VALUES ('" + username + "','" + pass + "','" + userID + "')");
-            con.commit();
+
+            // close and return
+            rs.close();
             statement.close();
+            con.commit();
             return true;
         } catch (java.sql.SQLException e){
             System.err.println(e.getMessage());
@@ -66,10 +98,13 @@ public class DBAccess {
 
     public static boolean createReview(int sRating, String rText, String picture, int authID, int itemID){
         Connection con = DBConnect.Connect();
+        if(con == null) return false;
         try {
             Statement statement = con.createStatement();
             statement.executeUpdate("INSERT INTO Reviews(StarRating, ReviewText, Picture, AuthorID, ItemID)" +
                     "VALUES ('" + sRating + "','" + rText + "','" + picture + "','" + authID + "','" + itemID + "')");
+            statement.close();
+            con.close();
             return true;
         } catch (java.sql.SQLException e){
             System.err.println(e.getMessage());
@@ -79,6 +114,7 @@ public class DBAccess {
 
     public static boolean createHelpful(int userID, int reviewID, boolean helpful){
         Connection con = DBConnect.Connect();
+        if(con == null) return false;
         int hInt;
         if(helpful) hInt = 1;
         else hInt = 0;
@@ -86,6 +122,8 @@ public class DBAccess {
             Statement statement = con.createStatement();
             statement.executeUpdate("INSERT INTO HelpfulVotes(UserID, ReviewID, Helpful)" +
                     "VALUES ('" + userID + "','" + reviewID + "','" + hInt + "')");
+            statement.close();
+            con.close();
             return true;
         } catch (java.sql.SQLException e){
             System.err.println(e.getMessage());
@@ -95,10 +133,13 @@ public class DBAccess {
 
     public static boolean addToCart(int userID, int itemID, int itemCount){
         Connection con = DBConnect.Connect();
+        if(con == null) return false;
         try {
             Statement statement = con.createStatement();
             statement.executeUpdate("INSERT INTO shoppingcarts(UserID, itemID, itemCount)" +
                     "VALUES ('" + userID + "','" + itemID + "','" + itemCount + "')");
+            statement.close();
+            con.close();
             return true;
         } catch (java.sql.SQLException e){
             System.err.println(e.getMessage());
