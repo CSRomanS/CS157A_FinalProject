@@ -32,6 +32,30 @@ class CartItem{
 }
 
 public class DBAccess {
+
+    /**
+     * Puts an item into scheduled orders for the user
+     * @param userID the user ID of the user scheduling an order
+     * @param itemID the item ID the user wants to order
+     * @param itemQuantity the amount of items to buy each time
+     * @return true if succesfully inserted, false otherwise
+     */
+    public static boolean scheduleItem(int userID, int itemID, int itemQuantity){
+        Connection con = DBConnect.Connect();
+        if(con == null) return false;
+        try {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("INSERT INTO ScheduledOrders(UserID, ItemID, ItemQuantity) " +
+                                        "VALUES ('" + userID + "','" + itemID + "','" + itemQuantity + "')");
+            statement.close();
+            con.close();
+            return true;
+        } catch (java.sql.SQLException e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
     /**
      * Verifies a username/password combo
      * @param username string containing the username
@@ -57,6 +81,18 @@ public class DBAccess {
         }
     }
 
+    /**
+     * Creates a new account by inserting into accounts and login
+     * @param username
+     * @param pass
+     * @param fName firstname
+     * @param lName lastName
+     * @param aLine Address Line one
+     * @param city
+     * @param state
+     * @param zip
+     * @return
+     */
     public static boolean createAccount(String username, String pass, String fName, String lName, String aLine, String city, String state, int zip){
         // SQL Statements
         Connection con = DBConnect.Connect();
@@ -96,6 +132,15 @@ public class DBAccess {
         }
     }
 
+    /**
+     * Create a review between a user and item
+     * @param sRating The star rating 1-5
+     * @param rText Review text (optional)
+     * @param picture Picture Link (optional)
+     * @param authID userID of the author
+     * @param itemID itemID the user is reviewing
+     * @return true if successful, false otherwise
+     */
     public static boolean createReview(int sRating, String rText, String picture, int authID, int itemID){
         Connection con = DBConnect.Connect();
         if(con == null) return false;
@@ -112,6 +157,13 @@ public class DBAccess {
         }
     }
 
+    /**
+     * Votes on a review as helpful or not
+     * @param userID user ID of the user doing the voting
+     * @param reviewID the review the user is voting on
+     * @param helpful wether to vote helpful or not
+     * @return true if succesful, false on sql failure
+     */
     public static boolean createHelpful(int userID, int reviewID, boolean helpful){
         Connection con = DBConnect.Connect();
         if(con == null) return false;
@@ -131,6 +183,13 @@ public class DBAccess {
         }
     }
 
+    /**
+     * Adds an item to the user's cart
+     * @param userID the ID of the user
+     * @param itemID the ID of the item
+     * @param itemCount the amount of items to add to cart
+     * @return true if successful, false otherwise
+     */
     public static boolean addToCart(int userID, int itemID, int itemCount){
         Connection con = DBConnect.Connect();
         if(con == null) return false;
@@ -193,6 +252,7 @@ public class DBAccess {
             String state = (String) reSet.getObject(3);
             Integer zip = (Integer) reSet.getObject(4);
 
+            // get tax rate from the state info
             reSet = statement.executeQuery("SELECT Tax "+
                     "FROM Taxes "+
                     "WHERE State='" + state + "';");

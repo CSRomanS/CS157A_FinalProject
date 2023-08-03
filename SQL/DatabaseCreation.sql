@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS Items (
   `Price` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   `SalePrice` DECIMAL(10,2) NULL,
   `SaleEnds` DATETIME NULL,
+  `ScheduledPrice` DECIMAL(10,2) NULL,
   `CategoryID` INT NOT NULL,
   PRIMARY KEY (`ItemID`),
   FOREIGN KEY (`CategoryID`)
@@ -142,4 +143,19 @@ CREATE TABLE IF NOT EXISTS ShoppingCarts (
 CREATE TABLE IF NOT EXISTS Taxes(
 	`State` CHAR(2) PRIMARY KEY,
     `Tax` DECIMAL(3,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ScheduledOrders(
+	`UserID` int NOT NULL,
+    `ItemID` int NOT NULL,
+    `ItemQuantity` int NOT NULL,
+  PRIMARY KEY(UserID, ItemID),
+  FOREIGN KEY (`UserID`)
+    REFERENCES Users (`UserID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (`ItemID`)
+    REFERENCES Items (`ItemID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );

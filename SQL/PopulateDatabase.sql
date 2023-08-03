@@ -13,9 +13,9 @@ VALUES
 	('3', 'Milk-Bone MaroSnacks Dog Treats', 'Tap into your dog’s canine heritage and treat them to a few of these savory, crunchy dog treats. ', 'Wheat Flour, Meat and Bone Meal, Sugar, Dried Poultry By-Products Digest, Cooked Bone Marrow Beef Fat (Preserved with Tocopherols), Salt, Corn Starch, Annatto Color, Red Iron Oxide (Color), Red 40, Sodium Metabisulfite (Used as a Preservative).', '11.48', '2'),
 	('4', 'Band-Aid Brand Flexible Fabric Adhesive Bandages', '100-count Band-Aid Brand Flexible Fabric Adhesive Bandages for first aid and wound protection of minor wounds, cuts, scrapes and burns', 'Made with Memory Weave fabric for comfort and flexibility, these first-aid wound care bandages stretch and flex as you move.', '8.96', '3');
 
-INSERT INTO Items (`ItemID`, `ItemName`, `MainDescription`, `CategoryDescription`, `Price`, `SalePrice`, `SaleEnds`, `CategoryID`) 
+INSERT INTO Items (`ItemID`, `ItemName`, `MainDescription`, `CategoryDescription`, `Price`, `SalePrice`, `SaleEnds`, `ScheduledPrice`, `CategoryID`) 
 VALUES 
-	('5', 'Tide Stain Remover', 'Powerful solution breaks stains down; microfiber pad lifts and absorbs them; Doesnt contain bleach.', 'Tide to Go is the portable, instant stain remover that helps eliminate many fresh food and drink stains on the spot.', '7.88', '5.00', '2023-08-01 00:00:00', 3);
+	('5', 'Tide Stain Remover', 'Powerful solution breaks stains down; microfiber pad lifts and absorbs them; Doesnt contain bleach.', 'Tide to Go is the portable, instant stain remover that helps eliminate many fresh food and drink stains on the spot.', '7.88', '5.00', '2023-08-01 00:00:00', '7.00', '3');
     
 INSERT INTO Pictures(`PictureID`, `Link`, `ItemID`) 
 VALUES 
