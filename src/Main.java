@@ -10,7 +10,10 @@ public class Main {
             //DBAccess.addToCart(1, 4, 5);
             //DBAccess.placeOrder(1);
             //System.out.println(DBAccess.verifyLogin("userTest", "passTest"));
-            DBAccess.scheduleItem(1, 5, 1);
+            //DBAccess.scheduleItem(1, 5, 1);
+            //DBAccess.removeFromCart(1, 2);
+            //DBAccess.addToWishList(1, 4);
+            //DBAccess.removeFromWishList(1, 4);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }

@@ -32,7 +32,6 @@ class CartItem{
 }
 
 public class DBAccess {
-
     /**
      * Puts an item into scheduled orders for the user
      * @param userID the user ID of the user scheduling an order
@@ -196,7 +195,55 @@ public class DBAccess {
         try {
             Statement statement = con.createStatement();
             statement.executeUpdate("INSERT INTO shoppingcarts(UserID, itemID, itemCount)" +
-                    "VALUES ('" + userID + "','" + itemID + "','" + itemCount + "')");
+                                        "VALUES ('" + userID + "','" + itemID + "','" + itemCount + "')");
+            statement.close();
+            con.close();
+            return true;
+        } catch (java.sql.SQLException e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean removeFromCart(int userID, int itemID){
+        Connection con = DBConnect.Connect();
+        if(con == null) return false;
+        try {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM shoppingcarts " +
+                                        "WHERE UserID='" + userID + "' AND ItemID='" + itemID + "';");
+            statement.close();
+            con.close();
+            return true;
+        } catch (java.sql.SQLException e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean addToWishList(int userID, int itemID){
+        Connection con = DBConnect.Connect();
+        if(con == null) return false;
+        try {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("INSERT INTO WishListItems(UserID, itemID)" +
+                    "VALUES ('" + userID + "','" + itemID + "')");
+            statement.close();
+            con.close();
+            return true;
+        } catch (java.sql.SQLException e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean removeFromWishList(int userID, int itemID){
+        Connection con = DBConnect.Connect();
+        if(con == null) return false;
+        try {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM WishListItems " +
+                    "WHERE UserID='" + userID + "' AND ItemID='" + itemID + "';");
             statement.close();
             con.close();
             return true;
