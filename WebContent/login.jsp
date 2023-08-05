@@ -24,14 +24,16 @@
                 <form action="<%=request.getContextPath() %>/register" method="post" class="register">
                     <h1>Register</h1>
                     <input type="text"  id="username" name="username" placeholder="Username" />
-                    <input type="text"  id="firstName" name="firstName" placeholder="First name" />
-                    <input type="text"  id="lastName" name="lastName" placeholder="Last name" />
+                    <input type="text"  id="firstname" name="firstname" placeholder="First name" />
+                    <input type="text"  id="lastname" name="lastname" placeholder="Last name" />
                     <input type="password" id="pwd" name="password" placeholder="Password" />
                     <input type="password" id="second_pwd" name="second_pwd" placeholder="Please type password again" />
-                    <input id="email" id="email" name="email" type="email" placeholder="Please enter email address">
-                    <input type="text" id="birth" name="birth" placeholder="Birthday YYYY-MM-DD" />
-                    <input type="text" id="phone" name="phone" placeholder="Phone number" />
-                    <input type="text" id="address" name="address" placeholder="Please enter adress" />
+                    <input type="text" id="phonenum" name="phonenum" placeholder="Please enter phone number">
+                    <input type="text" id="email" name="email" type="email" placeholder="Please enter email address">
+                    <input type="text" id="address" name="address" placeholder="Please enter street adress" />
+                    <input type="text" id="city" name="city" placeholder="Please enter city" />
+                    <input type="text" id="state" name="state" placeholder="Please enter state" />
+                    <input type="text" id="zipcode" name="zipcode" placeholder="Please enter zipcode" />
                     <button>Register</button>
                 </form>
             </div>
