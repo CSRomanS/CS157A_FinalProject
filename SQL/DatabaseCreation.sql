@@ -30,7 +30,10 @@ CREATE TABLE IF NOT EXISTS Items (
   `SalePrice` DECIMAL(10,2) NULL,
   `SaleEnds` DATETIME NULL,
   `ScheduledPrice` DECIMAL(10,2) NULL,
+  `Stock` INT NOT NULL,
+  `CoverPicture` VARCHAR(1000) NULL,
   `CategoryID` INT NOT NULL,
+  `IsFeatured` boolean NOT NULL DEFAULT false,
   PRIMARY KEY (`ItemID`),
   FOREIGN KEY (`CategoryID`)
     REFERENCES Categories (`CategoryID`)
@@ -42,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Reviews (
   `ReviewsID` INT NOT NULL AUTO_INCREMENT UNIQUE,
   `StarRating` INT NOT NULL,
   `ReviewText` VARCHAR(500) NULL DEFAULT NULL,
-  `Picture` VARCHAR(45) NULL DEFAULT NULL,
+  `Picture` VARCHAR(255) NULL DEFAULT NULL,
   `AuthorID` INT NOT NULL,
   `ItemID` INT NOT NULL,
   PRIMARY KEY (`ReviewsID`),
