@@ -92,15 +92,15 @@ public class DBAccess {
      * @param zip
      * @return
      */
-    public static boolean createAccount(String username, String pass, String fName, String lName, String aLine, String city, String state, int zip){
+    public static boolean createAccount(String username, String pass, String fName, String lName, String phoneNum, String email, String aLine, String city, String state, int zip){
         // SQL Statements
         Connection con = DBConnect.Connect();
         if(con == null) return false;
         try {
             con.setAutoCommit(false);
             Statement statement = con.createStatement();
-            statement.executeUpdate("INSERT INTO Users(FirstName, LastName, AddressLineOne, City, State, ZipCode)" +
-                            "VALUES ('" + fName + "','" + lName + "','" + aLine + "','" + city + "','" + state + "','" + zip + "')",
+            statement.executeUpdate("INSERT INTO Users(FirstName, LastName, PhoneNum, Email, AddressLineOne, City, State, ZipCode)" +
+                            "VALUES ('" + fName + "','" + lName + "','" + phoneNum + "','" + email + "','" + aLine + "','" + city + "','" + state + "','" + zip + "')",
                     Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = statement.getGeneratedKeys();
             rs.next();

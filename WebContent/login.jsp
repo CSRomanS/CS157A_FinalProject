@@ -15,13 +15,13 @@
     <body>
         <div class="head">
             <div class="mainpage_head">
-                <a href="first.jsp">Main page</a>
+                <a href="main.jsp">Main page</a>
             </div>
         </div>
         <div class="dowebok" id="dowebok">
             
             <div class="form-container sign-up">
-                <form action="<%=request.getContextPath() %>/register.do" method="post" class="register">
+                <form action="<%=request.getContextPath() %>/register" method="post" class="register">
                     <h1>Register</h1>
                     <input type="text"  id="username" name="username" placeholder="Username" />
                     <input type="text"  id="firstName" name="firstName" placeholder="First name" />
@@ -37,15 +37,20 @@
             </div>
             <!-- login -->
             <div class="form-container sign-in">
-                <form action="login.do" method="post" class="sign">
+                <form action="<%=request.getContextPath() %>/login" method="post" class="sign">
                     <h1>Login</h1>
-                    <input type="text" name="user_id" placeholder="userId">
+                    <input type="text" name="username" placeholder="username">
                     <input type="password"  name="password" placeholder="password">
+                     <%
+						if(request.getAttribute("msg")!=null){
+							out.println("<p style='color:#FF0000'>"+request.getAttribute("msg") + "</p>");
+						}
+					%>
                     <a href="###">Forgot password?</a>
                     <button>Login</button>
                 </form>
             </div>
-     
+     	
             <div class="overlay-container">
                 <div class="overlay">
                     
