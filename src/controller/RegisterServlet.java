@@ -1,20 +1,23 @@
 package controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Database.DBAccess;
+import Database.UserDao;
 
 /**
  * Servlet implementation class Register
  */
 @WebServlet("/register")
-public class Register extends HttpServlet {
+public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private UserDao userDao = new UserDao();
        
 
 	/**
@@ -45,12 +48,12 @@ public class Register extends HttpServlet {
 
 		
 		//insert user
-		boolean flag = DBAccess.createAccount(username, password, firstname, lastname, phonenum, email, address, city, state, zip);
+		boolean flag = userDao.createAccount(username, password, firstname, lastname, phonenum, email, address, city, state, zip);
 		
 		//response
 		if(flag) {
 			request.getSession().setAttribute("username", username);
-			request.getRequestDispatcher("/main.jsp").forward(request, response);
+			request.getRequestDispatcher("/homepage").forward(request, response);
 		} else {
 			request.setAttribute("msg","Register failed.");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);

@@ -98,6 +98,16 @@
     overflow: hidden;
     position: relative;
 }
+.itemcarousel{
+    /*display: block;*/
+    margin: 0px auto;
+    /*padding-top: 20px;*/
+    width: 500px;
+    border: 1px solid #0a3b86;
+    height: 414px;
+    overflow: hidden;
+    position: relative;
+}
 #carousel{
     display: flex;
     float:left;

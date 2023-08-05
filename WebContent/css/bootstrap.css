@@ -5968,6 +5968,12 @@ textarea.form-control-lg {
   position: relative;
 }
 
+.itemcarousel {
+  position: relative;
+  height: 400px;
+  width: 400px
+}
+
 .carousel.pointer-event {
   touch-action: pan-y;
 }
