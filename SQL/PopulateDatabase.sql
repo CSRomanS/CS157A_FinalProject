@@ -33,9 +33,9 @@ VALUES
         ('12', 'https://m.media-amazon.com/images/I/815jQzfsMmL._AC_SL1500_.jpg', '5'),
         ('13', 'https://m.media-amazon.com/images/I/71L6z4j6fXL._AC_SL1500_.jpg', '5');
         
-INSERT INTO Users(UserID, FirstName, LastName, AddressLineOne, City, State, ZipCode)
+INSERT INTO Users(UserID, FirstName, LastName, PhoneNum, Email, AddressLineOne, City, State, ZipCode)
 VALUES 
-		('1', 'fName', 'lName', 'Line 1 Address', 'tCity', 'CA', '94000');
+		('1', 'fName', 'lName', '5124857777', 'test@email', 'Line 1 Address', 'tCity', 'CA', '94000');
         
 INSERT INTO Logins(UserName, `PassWord`, UserID)
 VALUES
