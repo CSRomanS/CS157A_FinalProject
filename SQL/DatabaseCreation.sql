@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS Reviews (
   `Picture` VARCHAR(255) NULL DEFAULT NULL,
   `AuthorID` INT NOT NULL,
   `ItemID` INT NOT NULL,
+  `ReviewTime` DATETIME NOT NULL,
   PRIMARY KEY (`ReviewsID`),
   UNIQUE KEY (AuthorID, ItemID),
   FOREIGN KEY (`AuthorID`)
