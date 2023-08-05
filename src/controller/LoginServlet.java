@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Database.DBAccess;
 import Database.UserDao;
 
 @WebServlet("/login")
@@ -27,11 +26,13 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		if (userDao.verifyLogin(username, password) == -1) {
+		int userID = userDao.verifyLogin(username, password);
+		if (userID == -1) {
 			request.setAttribute("msg","Username and password do not match");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		} else {
 			request.getSession().setAttribute("username", username);
+			request.getSession().setAttribute("userID", userID);
 			request.getRequestDispatcher("/homepage").forward(request, response);
 		}
 	}

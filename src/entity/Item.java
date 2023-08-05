@@ -33,7 +33,6 @@ private Integer itemID;
 	
 	private List<Review> reviews;
 	
-
 	public Item() {
 	}
 

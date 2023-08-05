@@ -16,6 +16,46 @@
 	function changeMainImage(clickedImage) {
 		document.getElementById('mainImage').src = clickedImage.src;
 	}
+	
+	 function voteUseful(buttonElement) {
+		 
+		 const userID = '<%=request.getSession().getAttribute("userID")%>';
+		 
+		 console.log("UserID:", userID);
+
+		if (!userID || userID === "null" || userID.trim() === "") {
+			alert('You must be logged in to vote.');
+			return;
+		}
+		const reviewID = buttonElement.getAttribute('data-review-id');
+		// Print the userID to the console for debugging
+	    console.log("reviewID:", reviewID);
+
+		// Send a request to your server to register the vote
+		// Here's an example using jQuery:
+		$.ajax({
+			url : './voteUseful',
+			method : 'POST',
+			data : {
+				reviewID : reviewID,
+				userID : userID
+			},
+			success : function(response) {
+				// Update the count displayed next to the button
+				if (response.success) {
+					const voteCountElement = $(buttonElement).next(
+							'.useful-vote-count');
+					const newCount = parseInt(voteCountElement.text()) + 1;
+					voteCountElement.text(newCount);
+					
+					// Disable the button
+	                $(buttonElement).prop('disabled', true).text('Voted');
+				} else {
+					alert(response.message);
+				}
+			}
+		});
+	}
 </script>
 </head>
 <body>
@@ -101,32 +141,40 @@
 			</div>
 			<div class="x-action">
 				<div class="liji">
-					<a href="#">Buy Now</a>
-				</div>
-				<div class="add_cart">
 					<a href="./addcart.do?id=${item.itemID}">Add to Cart</a>
 				</div>
 			</div>
 		</div>
-
+		<div class="review-section">
+			<br />
+			<h2>Reviews</h2>
+			<br />
+			<c:forEach var="review" items="${item.reviews}">
+				<div class="review">
+					<div class="star-rating">Rating: ${review.starRating}</div>
+					<div class="review-text">Comment: ${review.reviewText}</div>
+					<div class="review-author">Reviewed by: ${review.authorName}</div>
+					<div class="review-author">Date: ${review.reviewTime}</div>
+					<c:if test="${not empty review.picture}">
+						<div class="review-image">
+							<img src="${review.picture}" alt="Review Image"
+								style="width: 100px; height: 100px;">
+						</div>
+					</c:if>
+				</div>
+				<div class="useful-vote-section">
+					<button class="useful-vote-button"
+						data-review-id="${review.reviewsID}" onclick="voteUseful(this)">Vote
+						as Useful</button>
+					<span class="useful-vote-count">${review.helpful}</span> people
+					found this useful.
+				</div>
+				<br/>
+				<br/>
+			</c:forEach>
+		</div>
 	</div>
 
-	<div class="review-section">
-		<h2>Reviews</h2>
-		<c:forEach var="review" items="${item.reviews}">
-			<div class="review">
-				<div class="star-rating">Star Rating: ${review.starRating}</div>
-				<div class="review-text">${review.reviewText}</div>
-				<div class="review-author">Reviewed by: ${review.authorName}</div>
-				<c:if test="${not empty review.picture}">
-					<div class="review-image">
-						<img src="${review.picture}" alt="Review Image"
-							style="width: 100px; height: 100px;">
-					</div>
-				</c:if>
-			</div>
-			<hr>
-		</c:forEach>
-	</div>
+
 </body>
 </html>
