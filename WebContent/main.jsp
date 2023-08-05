@@ -69,7 +69,7 @@
 				<div class="cate_photo">
 					<ul>
 						<c:forEach items="${electronics}" var="item">
-							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?id=${item.itemID}">
+							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
 									<div class="ph">
 										<img src="${item.coverPicture}">
 									</div>
@@ -85,7 +85,7 @@
 				<div class="cate_photo">
 					<ul>
 						<c:forEach items="${pets}" var="item">
-							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?id=${item.itemID}">
+							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
 									<div class="ph">
 										<img src="${item.coverPicture}">
 									</div>
@@ -101,7 +101,7 @@
 				<div class="cate_photo">
 					<ul>
 						<c:forEach items="${health}" var="item">
-							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?id=${item.itemID}">
+							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
 									<div class="ph">
 										<img src="${item.coverPicture}">
 									</div>
