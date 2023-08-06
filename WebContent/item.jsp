@@ -151,7 +151,7 @@
 			</div>
 			<div class="x-action">
 				<div class="liji">
-					<a href="./addcart.do?id=${item.itemID}">Add to Cart</a>
+					<a href="<%=request.getContextPath()%>/addToCart?itemID=${item.itemID}">Add to Cart</a>
 				</div>
 			</div>
 		</div>

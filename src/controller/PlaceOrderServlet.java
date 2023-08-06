@@ -64,7 +64,7 @@ public class PlaceOrderServlet extends HttpServlet {
 		}
 		
 		cDao.placeOrder(userID, ci);
-		
+		//TODO
 	}
 
 }

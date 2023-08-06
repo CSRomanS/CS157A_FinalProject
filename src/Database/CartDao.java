@@ -1,6 +1,7 @@
 package Database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -55,6 +56,47 @@ public class CartDao {
 	}
 
 	public void placeOrder(Integer userID, List<CartItem> ci) {
+		
+	}
+
+	public void insertCartItem(Integer userID, Integer itemID) {
+		
+		Connection con = DBConnect.Connect();
+		try {
+		    // Check if the row exists
+		    PreparedStatement checkStmt = con.prepareStatement(
+		        "SELECT COUNT(*) FROM shoppingcarts WHERE UserID = ? AND itemID = ?");
+		    checkStmt.setInt(1, userID);
+		    checkStmt.setInt(2, itemID);
+
+		    ResultSet rs = checkStmt.executeQuery();
+		    rs.next();
+		    int count = rs.getInt(1);
+		    rs.close();
+		    checkStmt.close();
+
+		    if(count > 0) {
+		        // Item already exists in cart, so update its count
+		        PreparedStatement updateStmt = con.prepareStatement(
+		            "UPDATE shoppingcarts SET itemCount = itemCount + 1 WHERE UserID = ? AND itemID = ?");
+		        updateStmt.setInt(1, userID);
+		        updateStmt.setInt(2, itemID);
+		        updateStmt.executeUpdate();
+		        updateStmt.close();
+		    } else {
+		        // Item does not exist in cart, so insert new row with count 1
+		        PreparedStatement insertStmt = con.prepareStatement(
+		            "INSERT INTO shoppingcarts(UserID, itemID, itemCount) VALUES (?, ?, 1)");
+		        insertStmt.setInt(1, userID);
+		        insertStmt.setInt(2, itemID);
+		        insertStmt.executeUpdate();
+		        insertStmt.close();
+		    }
+
+            con.close();
+        } catch (java.sql.SQLException e){
+            System.err.println(e.getMessage());
+        }
 		
 	}
 
