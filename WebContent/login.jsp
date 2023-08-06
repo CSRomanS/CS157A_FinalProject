@@ -15,7 +15,7 @@
     <body>
         <div class="head">
             <div class="mainpage_head">
-                <a href="main.jsp">Main page</a>
+                <a href="<%=request.getContextPath() %>/homepage">Main page</a>
             </div>
         </div>
         <div class="dowebok" id="dowebok">
