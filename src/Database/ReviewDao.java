@@ -24,7 +24,7 @@ public class ReviewDao {
 			ResultSet rs = statement.getResultSet();
 			rs.next();
 			int result = rs.getInt(1);
-			if (result > 0) {	//user has voted
+			if (result > 0) { // user has voted
 				return true;
 			}
 
@@ -43,12 +43,15 @@ public class ReviewDao {
 	 * @param userID
 	 * @param reviewID
 	 */
-	public void voteUseful(Integer userID, Integer reviewID) {
+	public void voteUseful(Integer userID, Integer reviewID, int helpful) {
+		if (helpful != 1) {
+			helpful = 0;
+		}
 		Connection con = DBConnect.Connect();
 		try {
 			Statement statement = con.createStatement();
 			statement.executeUpdate("INSERT INTO helpfulvotes(ReviewID, UserID, Helpful) " + "VALUES ('" + reviewID
-					+ "','" + userID + "','" + 1 + "')");
+					+ "','" + userID + "','" + helpful + "')");
 			statement.close();
 			con.close();
 		} catch (java.sql.SQLException e) {

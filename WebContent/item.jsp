@@ -37,8 +37,7 @@
 			return;
 		}
 		const reviewID = buttonElement.getAttribute('data-review-id');
-		// Print the userID to the console for debugging
-		console.log("reviewID:", reviewID);
+		const voteType = buttonElement.getAttribute('data-vote-type');
 
 		// Send a request to your server to register the vote
 		// Here's an example using jQuery:
@@ -47,18 +46,25 @@
 			method : 'POST',
 			data : {
 				reviewID : reviewID,
-				userID : userID
+				userID : userID,
+				helpful : voteType,
 			},
 			success : function(response) {
 				// Update the count displayed next to the button
 				if (response.success) {
-					const voteCountElement = $(buttonElement).next(
-							'.useful-vote-count');
+					let voteCountElement;
+					if (voteType == '1') {
+						voteCountElement = $(buttonElement).next(
+								'.useful-vote-count');
+					} else {
+						voteCountElement = $(buttonElement).next(
+								'.unuseful-vote-count');
+					}
 					const newCount = parseInt(voteCountElement.text()) + 1;
 					voteCountElement.text(newCount);
 
 					// Disable the button
-					$(buttonElement).prop('disabled', true).text('Voted');
+					$('.useful-vote-button[data-review-id="'+reviewID+'"], .unuseful-vote-button[data-review-id="'+reviewID+'"]').prop('disabled', true).text('Voted');
 				} else {
 					alert(response.message);
 				}
@@ -184,11 +190,18 @@
 					</c:if>
 				</div>
 				<div class="useful-vote-section">
-					<button class="useful-vote-button"
+					<button class="useful-vote-button" data-vote-type="1"
 						data-review-id="${review.reviewsID}" onclick="voteUseful(this)">Vote
 						as Useful</button>
-					<span class="useful-vote-count">${review.helpful}</span> people
-					found this useful.
+					<span class="useful-vote-count">${review.helpfulCount}</span>
+					people found this useful.
+				</div>
+				<div class="useful-vote-section">
+					<button class="useful-vote-button" data-vote-type="0"
+						data-review-id="${review.reviewsID}" onclick="voteUseful(this)">Vote
+						as Useful</button>
+					<span class="unuseful-vote-count">${review.unHelpfulCount}</span>
+					people found this unUseful.
 				</div>
 				<br />
 				<br />

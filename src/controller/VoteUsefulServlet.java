@@ -40,6 +40,7 @@ public class VoteUsefulServlet extends HttpServlet {
 
 		Integer userID = Integer.valueOf(request.getParameter("userID"));
 		Integer reviewID = Integer.valueOf(request.getParameter("reviewID"));
+		Integer helpful = Integer.valueOf(request.getParameter("helpful"));
 		
 
 		// Check if this user has already voted for this review
@@ -49,7 +50,7 @@ public class VoteUsefulServlet extends HttpServlet {
 		}
 
 		// If not, record the vote and update the review_votes table
-		rDao.voteUseful(userID, reviewID);
+		rDao.voteUseful(userID, reviewID, helpful);
 		
 		respondWithSuccess(response);
 		
