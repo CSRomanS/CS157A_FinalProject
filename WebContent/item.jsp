@@ -26,6 +26,21 @@
 		return true; // allow redirection
 	}
 	
+	function addToCart(itemID) {
+		if(!goToCart()){
+			return;
+		}
+	    const quantity = document.getElementById("quantity").value;
+	    console.log("itemID: " + itemID);
+	    console.log("Pre-URL itemID:", itemID, "Quantity:", quantity);
+	    
+	    const contextPath = '<%=request.getContextPath()%>';
+	    const url = contextPath + "/addToCart?itemID=" + itemID + "&quantity=" + quantity;
+	    console.log("Constructed URL:", url);
+	    
+	    window.location.href = url;
+	}
+	
 	 function voteUseful(buttonElement) {
 		 
 		 const userID = '<%=request.getSession().getAttribute("userID")%>';
@@ -165,10 +180,10 @@
 				</c:choose>
 			</div>
 			<div class="x-action">
+				<label for="quantity">Quantity:</label>
+				<input type="number" id="quantity" name="quantity" min="1" value="1">
 				<div class="liji">
-					<a
-						href="<%=request.getContextPath()%>/addToCart?itemID=${item.itemID}">Add
-						to Cart</a>
+					<a href="javascript:void(0);" onclick="addToCart(${item.itemID})">Add to Cart</a>
 				</div>
 			</div>
 		</div>
@@ -199,7 +214,7 @@
 				<div class="useful-vote-section">
 					<button class="useful-vote-button" data-vote-type="0"
 						data-review-id="${review.reviewsID}" onclick="voteUseful(this)">Vote
-						as Useful</button>
+						as Unuseful</button>
 					<span class="unuseful-vote-count">${review.unHelpfulCount}</span>
 					people found this unUseful.
 				</div>
