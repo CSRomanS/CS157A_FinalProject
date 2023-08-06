@@ -17,6 +17,15 @@
 		document.getElementById('mainImage').src = clickedImage.src;
 	}
 	
+	function goToCart() {
+    	const userID = '<%=request.getSession().getAttribute("userID")%>';
+		if (!userID || userID === "null" || userID.trim() === "") {
+			alert('You must be logged in to view your cart.');
+			return false; // prevent redirection
+		}
+		return true; // allow redirection
+	}
+	
 	 function voteUseful(buttonElement) {
 		 
 		 const userID = '<%=request.getSession().getAttribute("userID")%>';
@@ -71,8 +80,9 @@
 				</div>
 			</c:if>
 			<div class="cart">
-				<a href="cart.jsp"><img src="images/cart.png" height="28px">
-					<span>Cart</span> </a>
+				<a href="<%=request.getContextPath()%>/cart"
+					onclick="return goToCart();"><img src="images/cart.png"
+					height="28px"> <span>Cart</span> </a>
 			</div>
 			<c:if test="${empty username}">
 				<div class="login">

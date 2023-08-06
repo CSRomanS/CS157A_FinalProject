@@ -34,56 +34,80 @@ public class UserDao {
 			return -1;
 		}
 	}
-	
-	/**
-     * Creates a new account by inserting into accounts and login
-     * @param username
-     * @param pass
-     * @param fName firstname
-     * @param lName lastName
-     * @param aLine Address Line one
-     * @param city
-     * @param state
-     * @param zip
-     * @return
-     */
-    public boolean createAccount(String username, String pass, String fName, String lName, String phoneNum, String email, String aLine, String city, String state, int zip){
-        // SQL Statements
-        Connection con = DBConnect.Connect();
-        if(con == null) return false;
-        try {
-            con.setAutoCommit(false);
-            Statement statement = con.createStatement();
-            statement.executeUpdate("INSERT INTO Users(FirstName, LastName, PhoneNum, Email, AddressLineOne, City, State, ZipCode)" +
-                            "VALUES ('" + fName + "','" + lName + "','" + phoneNum + "','" + email + "','" + aLine + "','" + city + "','" + state + "','" + zip + "')",
-                    Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            int userID = rs.getInt(1);
-            statement.executeUpdate("INSERT INTO Logins(UserName, PassWord, UserID)" +
-                    "VALUES ('" + username + "','" + pass + "','" + userID + "')");
 
-            // close and return
-            rs.close();
-            statement.close();
-            con.commit();
-            return true;
-        } catch (java.sql.SQLException e){
-            System.err.println(e.getMessage());
-            try{
-                con.rollback();
-            } catch (SQLException sqle){
-                System.err.println(e.getMessage());
-            } finally {
-                try{
-                    con.commit();
-                    con.close();
-                } catch (SQLException sqle) {
-                    System.err.println(e.getMessage());
-                }
-            }
-            return false;
-        }
-    }
+	/**
+	 * Creates a new account by inserting into accounts and login
+	 * 
+	 * @param username
+	 * @param pass
+	 * @param fName    firstname
+	 * @param lName    lastName
+	 * @param aLine    Address Line one
+	 * @param city
+	 * @param state
+	 * @param zip
+	 * @return
+	 */
+	public boolean createAccount(String username, String pass, String fName, String lName, String phoneNum,
+			String email, String aLine, String city, String state, int zip) {
+		// SQL Statements
+		Connection con = DBConnect.Connect();
+		if (con == null)
+			return false;
+		try {
+			con.setAutoCommit(false);
+			Statement statement = con.createStatement();
+			statement.executeUpdate(
+					"INSERT INTO Users(FirstName, LastName, PhoneNum, Email, AddressLineOne, City, State, ZipCode)"
+							+ "VALUES ('" + fName + "','" + lName + "','" + phoneNum + "','" + email + "','" + aLine
+							+ "','" + city + "','" + state + "','" + zip + "')",
+					Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = statement.getGeneratedKeys();
+			rs.next();
+			int userID = rs.getInt(1);
+			statement.executeUpdate("INSERT INTO Logins(UserName, PassWord, UserID)" + "VALUES ('" + username + "','"
+					+ pass + "','" + userID + "')");
+
+			// close and return
+			rs.close();
+			statement.close();
+			con.commit();
+			return true;
+		} catch (java.sql.SQLException e) {
+			System.err.println(e.getMessage());
+			try {
+				con.rollback();
+			} catch (SQLException sqle) {
+				System.err.println(e.getMessage());
+			} finally {
+				try {
+					con.commit();
+					con.close();
+				} catch (SQLException sqle) {
+					System.err.println(e.getMessage());
+				}
+			}
+			return false;
+		}
+	}
+
+	public Float getUserTaxRate(int userID) {
+		Connection con = DBConnect.Connect();
+		Float tax = null;
+		try {
+			Statement statement = con.createStatement();
+			statement.executeQuery(
+					"SELECT t.Tax FROM taxes t, users u WHERE u.state = t.state AND u.UserID = " + userID + ";");
+			ResultSet rs = statement.getResultSet();
+			rs.next();
+			tax = rs.getFloat(1); // return -1 if no match found
+			DBConnect.close(con, statement, rs);
+			
+			return tax;
+		} catch (java.sql.SQLException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
 
 }

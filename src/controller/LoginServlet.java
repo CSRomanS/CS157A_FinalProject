@@ -33,6 +33,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			request.getSession().setAttribute("username", username);
 			request.getSession().setAttribute("userID", userID);
+			request.getSession().setAttribute("taxRate", userDao.getUserTaxRate(userID));
 			request.getRequestDispatcher("/homepage").forward(request, response);
 		}
 	}

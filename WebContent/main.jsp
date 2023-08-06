@@ -10,6 +10,16 @@
 	charset="ISO-8859-1"></script>
 <script src="js/front_page.js" type="text/javascript"
 	charset="ISO-8859-1"></script>
+<script>
+	function goToCart() {
+    	const userID = '<%=request.getSession().getAttribute("userID")%>';
+		if (!userID || userID === "null" || userID.trim() === "") {
+			alert('You must be logged in to view your cart.');
+			return false; // prevent redirection
+		}
+		return true; // allow redirection
+	}
+</script>
 </head>
 <body>
 	<%
@@ -27,16 +37,16 @@
 				</div>
 			</c:if>
 			<div class="cart">
-				<a href="cart.jsp"><img src="images/cart.png" height="28px">
-					<span>Cart</span> </a>
+				<a href="<%=request.getContextPath()%>/cart"
+					onclick="return goToCart();"><img src="images/cart.png"
+					height="28px"> <span>Cart</span> </a>
 			</div>
 			<c:if test="${empty username}">
 				<div class="login">
 					<div>
 						<a href="login.jsp">Login/Register</a>
 					</div>
-					<div>
-					</div>
+					<div></div>
 				</div>
 			</c:if>
 
@@ -57,7 +67,8 @@
 			<div id="carousel">
 				<c:forEach items="${items}" var="item">
 					<div>
-						<a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}"><img
+						<a
+							href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}"><img
 							src="${item.coverPicture}"></a>
 					</div>
 				</c:forEach>
@@ -69,7 +80,8 @@
 				<div class="cate_photo">
 					<ul>
 						<c:forEach items="${electronics}" var="item">
-							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
+							<li class="item_pic"><a
+								href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
 									<div class="ph">
 										<img src="${item.coverPicture}">
 									</div>
@@ -85,7 +97,8 @@
 				<div class="cate_photo">
 					<ul>
 						<c:forEach items="${pets}" var="item">
-							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
+							<li class="item_pic"><a
+								href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
 									<div class="ph">
 										<img src="${item.coverPicture}">
 									</div>
@@ -101,7 +114,8 @@
 				<div class="cate_photo">
 					<ul>
 						<c:forEach items="${health}" var="item">
-							<li class="item_pic"><a href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
+							<li class="item_pic"><a
+								href="<%=request.getContextPath() %>/detail?itemID=${item.itemID}">
 									<div class="ph">
 										<img src="${item.coverPicture}">
 									</div>

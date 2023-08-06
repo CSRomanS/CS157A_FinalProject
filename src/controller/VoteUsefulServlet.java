@@ -17,7 +17,7 @@ import Database.ReviewDao;
  * Servlet implementation class voteUseful
  */
 @WebServlet("/voteUseful")
-public class voteUseful extends HttpServlet {
+public class VoteUsefulServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private ReviewDao rDao = new ReviewDao();

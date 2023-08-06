@@ -2,8 +2,8 @@ $(function(){
     // $(".c-sum_num").click(function(){
     // 	console.info($(this).text());
     // })
-    totl();
-    goodsnum();
+    //totl();
+    //goodsnum();
     // check all
     $(".all").click(function() {
         all = $(this).prop("checked")
@@ -47,16 +47,24 @@ $(function(){
     });
     // sum
     function totl(){
-        let sumprice = 0;
-        $.each($(".c-sum_num"),function() {
-            sumprice+=parseFloat($(this).text());
-            $(".show-money span").text(sumprice);
+    	let sumprice = 0;
+        $(".each:checked").each(function() {
+            // Find the parent container for the checked item
+            let cartItem = $(this).parents(".carts-goods");
+
+            // Fetch the quantity and price for the checked item
+            let quantity = parseInt(cartItem.find(".text_num").val());
+            let price = parseFloat(cartItem.find(".c-price_num").text());
+            
+            sumprice += quantity * price;
         });
+
+        $(".show-money span").text(sumprice);
     };
     // total count
     function goodsnum(){
         let goods_num=0;
-        $.each($(".text_num"),function() {
+        $(".each:checked").each($(".text_num"),function() {
             goods_num+=parseInt($(this).val());
             $(".goods_num span").text(goods_num);
         });
