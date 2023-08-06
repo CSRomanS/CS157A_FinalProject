@@ -33,13 +33,14 @@ public class AddToCartServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer itemID = Integer.valueOf(request.getParameter("itemID"));
+		Integer itemCount = Integer.valueOf(request.getParameter("quantity"));
 		
 		HttpSession session = request.getSession(false); // false means don't create a new session if one doesn't exist
 
 		if (session != null) {
 			Integer userID = (Integer)session.getAttribute("userID");
 		    if (userID != null) {
-		    	cDao.insertCartItem(userID, itemID);
+		    	cDao.insertCartItem(userID, itemID, itemCount);
 				request.getRequestDispatcher("/cart").forward(request, response);
 		    } 
 		} else {

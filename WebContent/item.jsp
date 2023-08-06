@@ -26,19 +26,33 @@
 		return true; // allow redirection
 	}
 	
+	function addToCart(itemID) {
+		if(!goToCart()){
+			return;
+		}
+	    const quantity = document.getElementById("quantity").value;
+	    console.log("itemID: " + itemID);
+	    console.log("Pre-URL itemID:", itemID, "Quantity:", quantity);
+	    
+	    const contextPath = '<%=request.getContextPath()%>';
+	    const url = contextPath + "/addToCart?itemID=" + itemID + "&quantity=" + quantity;
+	    console.log("Constructed URL:", url);
+	    
+	    window.location.href = url;
+	}
+	
 	 function voteUseful(buttonElement) {
 		 
 		 const userID = '<%=request.getSession().getAttribute("userID")%>';
-		 
-		 console.log("UserID:", userID);
+
+		console.log("UserID:", userID);
 
 		if (!userID || userID === "null" || userID.trim() === "") {
 			alert('You must be logged in to vote.');
 			return;
 		}
 		const reviewID = buttonElement.getAttribute('data-review-id');
-		// Print the userID to the console for debugging
-	    console.log("reviewID:", reviewID);
+		const voteType = buttonElement.getAttribute('data-vote-type');
 
 		// Send a request to your server to register the vote
 		// Here's an example using jQuery:
@@ -47,18 +61,25 @@
 			method : 'POST',
 			data : {
 				reviewID : reviewID,
-				userID : userID
+				userID : userID,
+				helpful : voteType,
 			},
 			success : function(response) {
 				// Update the count displayed next to the button
 				if (response.success) {
-					const voteCountElement = $(buttonElement).next(
-							'.useful-vote-count');
+					let voteCountElement;
+					if (voteType == '1') {
+						voteCountElement = $(buttonElement).next(
+								'.useful-vote-count');
+					} else {
+						voteCountElement = $(buttonElement).next(
+								'.unuseful-vote-count');
+					}
 					const newCount = parseInt(voteCountElement.text()) + 1;
 					voteCountElement.text(newCount);
-					
+
 					// Disable the button
-	                $(buttonElement).prop('disabled', true).text('Voted');
+					$('.useful-vote-button[data-review-id="'+reviewID+'"], .unuseful-vote-button[data-review-id="'+reviewID+'"]').prop('disabled', true).text('Voted');
 				} else {
 					alert(response.message);
 				}
@@ -147,11 +168,22 @@
 			</div>
 			<div class="x-price">
 				<span>$</span>
-				<div class="x-price_num">${item.price}</div>
+				<c:choose>
+					<c:when test="${item.salePrice != null}">
+						<div class="x-price_num">
+							<strike>${item.price}</strike> ${item.salePrice}
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="x-price_num">${item.price}</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="x-action">
+				<label for="quantity">Quantity:</label>
+				<input type="number" id="quantity" name="quantity" min="1" value="1">
 				<div class="liji">
-					<a href="<%=request.getContextPath()%>/addToCart?itemID=${item.itemID}">Add to Cart</a>
+					<a href="javascript:void(0);" onclick="addToCart(${item.itemID})">Add to Cart</a>
 				</div>
 			</div>
 		</div>
@@ -173,14 +205,22 @@
 					</c:if>
 				</div>
 				<div class="useful-vote-section">
-					<button class="useful-vote-button"
+					<button class="useful-vote-button" data-vote-type="1"
 						data-review-id="${review.reviewsID}" onclick="voteUseful(this)">Vote
 						as Useful</button>
-					<span class="useful-vote-count">${review.helpful}</span> people
-					found this useful.
+					<span class="useful-vote-count">${review.helpfulCount}</span>
+					people found this useful.
 				</div>
-				<br/>
-				<br/>
+				<div class="useful-vote-section">
+					<button class="useful-vote-button" data-vote-type="0"
+						data-review-id="${review.reviewsID}" onclick="voteUseful(this)">Vote
+						as Unuseful</button>
+					<span class="unuseful-vote-count">${review.unHelpfulCount}</span>
+					people found this unUseful.
+				</div>
+				
+				<br />
+				<br />
 			</c:forEach>
 		</div>
 	</div>

@@ -3,6 +3,7 @@ package Database;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,17 @@ public class ItemDao {
 				item.setMainDescription(rs.getString(3));
 				item.setCategoryDescription(rs.getString(4));
 				item.setPrice(rs.getFloat(5));
-				item.setSalePrice(rs.getFloat(6));
-				item.setSaleEnds(rs.getDate(7));
+				item.setSaleEnds(rs.getTimestamp(7));
+				
+				Timestamp saleEnds = rs.getTimestamp(7); 
+				Timestamp now = new Timestamp(System.currentTimeMillis());
+
+				if (saleEnds == null || saleEnds.before(now)) {
+				    item.setSalePrice(null);
+				} else {
+				    item.setSalePrice(rs.getFloat(6));
+				}
+				
 				item.setScheduledPrice(rs.getFloat(8));
 				item.setStock(rs.getInt(9));
 				item.setCoverPicture(rs.getString(10));
@@ -56,7 +66,7 @@ public class ItemDao {
 			
 			item.setPhotos(photos);
 			
-			statement.executeQuery("SELECT r.ReviewsID, r.StarRating, r.ReviewText, r.Picture, r.AuthorID, u.FirstName, u.LastName, r.ReviewTime, (select COUNT(h.ReviewID) from helpfulvotes h where h.ReviewID = r.ReviewsID) as hCount FROM reviews r, users u WHERE ItemID = " + itemID + " AND r.AuthorID = u.UserID ORDER BY ReviewTime;");
+			statement.executeQuery("SELECT r.ReviewsID, r.StarRating, r.ReviewText, r.Picture, r.AuthorID, u.FirstName, u.LastName, r.ReviewTime, (select COUNT(h.ReviewID) from helpfulvotes h where h.ReviewID = r.ReviewsID AND helpful=1), (select COUNT(h.ReviewID) from helpfulvotes h where h.ReviewID = r.ReviewsID AND helpful=0) as hCount FROM reviews r, users u WHERE ItemID = " + itemID + " AND r.AuthorID = u.UserID ORDER BY ReviewTime;");
 			ResultSet rs3 = statement.getResultSet();
 			while (rs3.next()) {
 				Review r = new Review();
@@ -67,7 +77,8 @@ public class ItemDao {
 				r.setAuthorID(rs3.getInt(5));
 				r.setAuthorName(rs3.getString(6) + " " + rs3.getString(7));
 				r.setReviewTime(Util.datetimeToString(rs3.getTimestamp(8)));
-				r.setHelpful(rs3.getInt(9));
+				r.setHelpfulCount(rs3.getInt(9));
+				r.setUnHelpfulCount(rs3.getInt(10));
 				
 				reviews.add(r);
 			}

@@ -9,80 +9,105 @@
 <script src="js/jquery-3.6.0.js" type="text/javascript"
 	charset="ISO-8859-1"></script>
 <script>
+	var taxRate =
+<%=session.getAttribute("taxRate")%>
+	;
+	$(document)
+			.ready(
+					function() {
 
-	var taxRate = <%= session.getAttribute("taxRate") %>;
-	$(document).ready(
-			function() {
-				
-				$("#submitLink").click(function(event){
-				    event.preventDefault(); // Prevents the default action of the <a> tag.
-				    $("#orderForm").submit(); // Submits the form.
-				});
-				
-				$("#orderForm").on('submit', function(event){
-			        // Clear the form to avoid multiple submissions
-			        $(this).find('.dynamic-input').remove();
+						$("#submitLink").click(function(event) {
+							event.preventDefault(); // Prevents the default action of the <a> tag.
+							$("#orderForm").submit(); // Submits the form.
+						});
 
-			        // Loop over each cart item and add it to the form
-			        $('.carts-goods').each(function(index, cartItem){
-			            var itemCount = $(cartItem).find('#itemCount').val(); // Or however you're storing item count
-			            var itemID = $(cartItem).find('#itemID').data('item-id');
+						$("#orderForm")
+								.on(
+										'submit',
+										function(event) {
+											// Clear the form to avoid multiple submissions
+											$(this).find('.dynamic-input')
+													.remove();
 
-			            // Add these values to the form
-			            $("#orderForm").append('<input type="hidden" class="dynamic-input" name="itemCount" value="' + itemCount + '">');
-			            $("#orderForm").append('<input type="hidden" class="dynamic-input" name="itemID" value="' + itemID + '">');
-			        });
+											// Loop over each cart item and add it to the form
+											$('.carts-goods')
+													.each(
+															function(index,
+																	cartItem) {
+																var itemCount = $(
+																		cartItem)
+																		.find(
+																				'#itemCount')
+																		.val(); // Or however you're storing item count
+																var itemID = $(
+																		cartItem)
+																		.find(
+																				'#itemID')
+																		.data(
+																				'item-id');
 
-			    });
-				
-				
-				function updateTotals() {
-					let totalItems = 0;
-					let totalPrice = 0;
+																// Add these values to the form
+																$("#orderForm")
+																		.append(
+																				'<input type="hidden" class="dynamic-input" name="itemCount" value="' + itemCount + '">');
+																$("#orderForm")
+																		.append(
+																				'<input type="hidden" class="dynamic-input" name="itemID" value="' + itemID + '">');
+															});
 
-					$(".carts-goods").each(
-							function() {
-								let count = parseInt($(this)
-										.find('.text_num').val());
-								let price = parseFloat($(this).find(
-										'.c-price_num').data('price'));
+										});
 
-								totalItems += count;
-								totalPrice += (count * price);
+						function updateTotals() {
+							let totalItems = 0;
+							let totalPrice = 0;
 
-								// Update line total for this item
-								$(this).find('.c-sum_num').text(
-										'$' + (count * price).toFixed(2));
-							});
-					
-					console.log("taxRate:", taxRate);
+							$(".carts-goods").each(
+									function() {
+										let count = parseInt($(this).find(
+												'.text_num').val());
+										let price = parseFloat($(this).find(
+												'.c-price_num').data('price'));
 
-					let tax = totalPrice * taxRate; // Calculate the tax.
-				    let totalPriceWithTax = totalPrice + tax; // Add tax to total.
+										totalItems += count;
+										totalPrice += (count * price);
 
-					$("#total-items").text("Item Number: " + totalItems);
-					$("#total-price").text('$' + totalPriceWithTax.toFixed(2));
-					$("#tax").text("$" + tax.toFixed(2))
-				}
+										// Update line total for this item
+										$(this).find('.c-sum_num').text(
+												'$'
+														+ (count * price)
+																.toFixed(2));
+									});
 
-				$(".add").click(function() {
-					let input = $(this).prev('.text_num');
-					input.val(parseInt(input.val()) + 1);
-					updateTotals();
-				});
+							console.log("taxRate:", taxRate);
 
-				$(".reduce").click(function() {
-					let input = $(this).next('.text_num');
-					let currentValue = parseInt(input.val());
-					if (currentValue > 1) {
-						input.val(currentValue - 1);
+							let tax = totalPrice * taxRate; // Calculate the tax.
+							let totalPriceWithTax = totalPrice + tax; // Add tax to total.
+
+							$("#total-items")
+									.text("Item Number: " + totalItems);
+							$("#total-price").text(
+									'$' + totalPriceWithTax.toFixed(2));
+							$("#tax").text("$" + tax.toFixed(2))
+						}
+
+						$(".add").click(function() {
+							let input = $(this).prev('.text_num');
+							input.val(parseInt(input.val()) + 1);
+							updateTotals();
+						});
+
+						$(".reduce").click(function() {
+							let input = $(this).next('.text_num');
+							let currentValue = parseInt(input.val());
+							if (currentValue > 1) {
+								input.val(currentValue - 1);
+								updateTotals();
+							}
+						});
+
+						// Initial update
 						updateTotals();
-					}
-				});
-
-				// Initial update
-				updateTotals();
-			});
+					});
 </script>
 </head>
 <body>
@@ -105,8 +130,10 @@
 		<c:forEach items="${cartList}" var="cart">
 			<div class="carts-goods">
 				<div class="cell c-images">
-					<a href="<%=request.getContextPath()%>/detail?itemID=${cart.item.itemID}"
-						title="${cart.item.itemName}" id="itemID" data-item-id="${cart.item.itemID}"><img
+					<a
+						href="<%=request.getContextPath()%>/detail?itemID=${cart.item.itemID}"
+						title="${cart.item.itemName}" id="itemID"
+						data-item-id="${cart.item.itemID}"><img
 						src="${cart.item.coverPicture}" alt="${cart.item.coverPicture}"></a>
 				</div>
 				<div class="cell c-goodsname">
@@ -115,11 +142,22 @@
 				<div class="cell c-props">${cart.item.categoryDescription}</div>
 				<div class="cell c-price">
 					<span>$</span>
-					<div class="c-price_num" data-price="${cart.item.price}">${cart.item.price}</div>
+					<c:choose>
+						<c:when
+							test="${cart.item.salePrice != null}">
+							<div class="c-price_num" data-price="${cart.item.salePrice}">
+								<strike>${cart.item.price}</strike> ${cart.item.salePrice}
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="c-price_num" data-price="${cart.item.price}">${cart.item.price}</div>
+						</c:otherwise>
+					</c:choose>
 				</div>
 				<div class="cell c-quantity">
 					<button type="button" class="reduce">-</button>
-					<input type="text" value="${cart.itemCount}" class="text_num" id="itemCount">
+					<input type="text" value="${cart.itemCount}" class="text_num"
+						id="itemCount">
 					<button type="button" class="add">+</button>
 				</div>
 				<div class="cell c-sum">
@@ -138,17 +176,18 @@
 		<div class="cart-pay">
 			<div class="pay-left">
 				<div class="goods_num" id="total-items">
-					 <span>0</span>
+					<span>0</span>
 				</div>
 			</div>
 			<div class="pay-right">
 				<div class="right_jie">
 					<div class="btn">
-						<form id="orderForm" action="<%=request.getContextPath()%>/placeOrder" method="post">
-						    <!-- Dynamically added input fields will go here -->
-						    <a href="#" id="submitLink">Pay</a>
+						<form id="orderForm"
+							action="<%=request.getContextPath()%>/placeOrder" method="post">
+							<!-- Dynamically added input fields will go here -->
+							<a href="#" id="submitLink">Pay</a>
 						</form>
-							
+
 					</div>
 					<div class="price-sum">
 						<div class="price-show">Total:</div>
@@ -162,7 +201,7 @@
 							$ <span>00.00</span>
 						</div>
 					</div>
-					
+
 				</div>
 			</div>
 		</div>

@@ -20,14 +20,15 @@ public class Review {
 	
 	private String reviewTime;
 	
-	private int helpful;
+	private int helpfulCount;
+	
+	private int unHelpfulCount;
 
 	public Review() {
 	}
 
-
 	public Review(int reviewsID, int starRating, String reviewText, String picture, int authorID, String authorName,
-			int itemID, String reviewTime, int helpful) {
+			int itemID, String reviewTime, int helpfulCount, int unHelpfulCount) {
 		super();
 		this.reviewsID = reviewsID;
 		this.starRating = starRating;
@@ -37,21 +38,9 @@ public class Review {
 		this.authorName = authorName;
 		ItemID = itemID;
 		this.reviewTime = reviewTime;
-		this.helpful = helpful;
+		this.helpfulCount = helpfulCount;
+		this.unHelpfulCount = unHelpfulCount;
 	}
-
-
-
-
-	public String getReviewTime() {
-		return reviewTime;
-	}
-
-
-	public void setReviewTime(String reviewTime) {
-		this.reviewTime = reviewTime;
-	}
-
 
 	public int getReviewsID() {
 		return reviewsID;
@@ -93,6 +82,14 @@ public class Review {
 		this.authorID = authorID;
 	}
 
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
 	public int getItemID() {
 		return ItemID;
 	}
@@ -100,36 +97,38 @@ public class Review {
 	public void setItemID(int itemID) {
 		ItemID = itemID;
 	}
-	
 
-	public String getAuthorName() {
-		return authorName;
+	public String getReviewTime() {
+		return reviewTime;
 	}
 
-
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
-	}
-	
-
-
-	public int getHelpful() {
-		return helpful;
+	public void setReviewTime(String reviewTime) {
+		this.reviewTime = reviewTime;
 	}
 
-
-	public void setHelpful(int helpful) {
-		this.helpful = helpful;
+	public int getHelpfulCount() {
+		return helpfulCount;
 	}
 
+	public void setHelpfulCount(int helpfulCount) {
+		this.helpfulCount = helpfulCount;
+	}
+
+	public int getUnHelpfulCount() {
+		return unHelpfulCount;
+	}
+
+	public void setUnHelpfulCount(int unHelpfulCount) {
+		this.unHelpfulCount = unHelpfulCount;
+	}
 
 	@Override
 	public String toString() {
 		return "Review [reviewsID=" + reviewsID + ", starRating=" + starRating + ", reviewText=" + reviewText
 				+ ", picture=" + picture + ", authorID=" + authorID + ", authorName=" + authorName + ", ItemID="
-				+ ItemID + ", reviewTime=" + reviewTime + ", helpful=" + helpful + "]";
+				+ ItemID + ", reviewTime=" + reviewTime + ", helpfulCount=" + helpfulCount + ", unHelpfulCount="
+				+ unHelpfulCount + "]";
 	}
-
 
 
 }
