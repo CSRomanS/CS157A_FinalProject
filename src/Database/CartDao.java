@@ -3,14 +3,18 @@ package Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import entity.CartItem;
 import entity.Item;
+import entity.User;
 
 public class CartDao {
+	
+	private UserDao uDao = new UserDao();
 
 	/**
 	 * get all the cart items by userID
@@ -55,9 +59,90 @@ public class CartDao {
 		
 	}
 
-	public void placeOrder(Integer userID, List<CartItem> ci) {
-		
+	public boolean placeOrder(Integer userID, List<CartItem> cartItems) {
+		Connection con = DBConnect.Connect();
+
+	    if (con == null) return false;
+
+	    try {
+	        // Start a transaction
+	        con.setAutoCommit(false);
+
+	        // 1. Calculate the total cost and taxes
+	        float totalCost = 0;
+	        for (CartItem cartItem : cartItems) {
+	            totalCost += cartItem.getItemCount() * cartItem.getItem().getPrice();
+	        }
+
+	        // Fetch tax rate for user's state
+	        User user = uDao.getAddressForUser(userID);
+	        float taxRate = uDao.getUserTaxRate(userID);
+	        float taxes = totalCost * taxRate;
+	        
+	        // 2. Insert into orders table
+	        String insertOrderSQL = "INSERT INTO orders (DatePlaced, Cost, Taxes, UserID, AddressLineOne, City, State, ZipCode) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement psOrder = con.prepareStatement(insertOrderSQL, Statement.RETURN_GENERATED_KEYS);
+	        psOrder.setFloat(1, totalCost + taxes);
+	        psOrder.setFloat(2, taxes);
+	        psOrder.setInt(3, userID);
+	        psOrder.setString(4, user.getAddress());
+	        psOrder.setString(5, user.getCity());
+	        psOrder.setString(6, user.getState());
+	        psOrder.setString(7, user.getZipcode());
+
+	        psOrder.executeUpdate();
+	        ResultSet generatedKeys = psOrder.getGeneratedKeys();
+	        int orderID = 0;
+	        if (generatedKeys.next()) {
+	            orderID = generatedKeys.getInt(1);
+	        }
+
+	        // 3. Insert each CartItem into orderitems table
+	        String insertOrderItemSQL = "INSERT INTO orderitems (ItemID, ItemCount, ItemCost, OrderID) VALUES (?, ?, ?, ?)";
+	        PreparedStatement psOrderItem = con.prepareStatement(insertOrderItemSQL);
+
+	        for (CartItem cartItem : cartItems) {
+	            psOrderItem.setInt(1, cartItem.getItem().getItemID());
+	            psOrderItem.setInt(2, cartItem.getItemCount());
+	            psOrderItem.setFloat(3, cartItem.getItem().getPrice());
+	            psOrderItem.setInt(4, orderID);
+
+	            psOrderItem.addBatch();
+	        }
+	        
+	        psOrderItem.executeBatch();
+
+	        // 4. Delete the items from shoppingcarts for the given userID
+	        String deleteCartSQL = "DELETE FROM shoppingcarts WHERE UserID = ?";
+	        PreparedStatement psDeleteCart = con.prepareStatement(deleteCartSQL);
+	        psDeleteCart.setInt(1, userID);
+
+	        psDeleteCart.executeUpdate();
+
+	        // Commit the transaction
+	        con.commit();
+
+	        // Close the statements and connection
+	        psOrder.close();
+	        psOrderItem.close();
+	        psDeleteCart.close();
+	        con.close();
+
+	        return true;
+	    } catch (SQLException e) {
+	        // Rollback in case of any exception
+	        try {
+				con.rollback();
+				con.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+	        System.err.println(e.getMessage()); 
+	        return false;
+	    }
 	}
+	
+	
 
 	public void insertCartItem(Integer userID, Integer itemID) {
 		

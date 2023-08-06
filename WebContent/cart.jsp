@@ -25,8 +25,8 @@
 
 			        // Loop over each cart item and add it to the form
 			        $('.carts-goods').each(function(index, cartItem){
-			            var itemCount = $(cartItem).find('.text_num').text(); // Or however you're storing item count
-			            var itemID = $(cartItem).find('.item-id').data('item-id');
+			            var itemCount = $(cartItem).find('#itemCount').val(); // Or however you're storing item count
+			            var itemID = $(cartItem).find('#itemID').data('item-id');
 
 			            // Add these values to the form
 			            $("#orderForm").append('<input type="hidden" class="dynamic-input" name="itemCount" value="' + itemCount + '">');
@@ -106,7 +106,7 @@
 			<div class="carts-goods">
 				<div class="cell c-images">
 					<a href="<%=request.getContextPath()%>/detail?itemID=${cart.item.itemID}"
-						title="${cart.item.itemName}" data-item-id="${cart.item.itemID}"><img
+						title="${cart.item.itemName}" id="itemID" data-item-id="${cart.item.itemID}"><img
 						src="${cart.item.coverPicture}" alt="${cart.item.coverPicture}"></a>
 				</div>
 				<div class="cell c-goodsname">
@@ -119,7 +119,7 @@
 				</div>
 				<div class="cell c-quantity">
 					<button type="button" class="reduce">-</button>
-					<input type="text" value="${cart.itemCount}" class="text_num">
+					<input type="text" value="${cart.itemCount}" class="text_num" id="itemCount">
 					<button type="button" class="add">+</button>
 				</div>
 				<div class="cell c-sum">

@@ -48,11 +48,13 @@ public class RegisterServlet extends HttpServlet {
 
 		
 		//insert user
-		boolean flag = userDao.createAccount(username, password, firstname, lastname, phonenum, email, address, city, state, zip);
+		int userID = userDao.createAccount(username, password, firstname, lastname, phonenum, email, address, city, state, zip);
 		
 		//response
-		if(flag) {
+		if(userID > 0) {
 			request.getSession().setAttribute("username", username);
+			request.getSession().setAttribute("userID", userID);
+			request.getSession().setAttribute("taxRate", userDao.getUserTaxRate(userID));
 			request.getRequestDispatcher("/homepage").forward(request, response);
 		} else {
 			request.setAttribute("msg","Register failed.");

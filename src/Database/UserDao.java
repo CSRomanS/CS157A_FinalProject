@@ -1,9 +1,12 @@
 package Database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import entity.User;
 
 public class UserDao {
 
@@ -48,12 +51,12 @@ public class UserDao {
 	 * @param zip
 	 * @return
 	 */
-	public boolean createAccount(String username, String pass, String fName, String lName, String phoneNum,
+	public int createAccount(String username, String pass, String fName, String lName, String phoneNum,
 			String email, String aLine, String city, String state, int zip) {
 		// SQL Statements
 		Connection con = DBConnect.Connect();
 		if (con == null)
-			return false;
+			return -1;
 		try {
 			con.setAutoCommit(false);
 			Statement statement = con.createStatement();
@@ -72,7 +75,7 @@ public class UserDao {
 			rs.close();
 			statement.close();
 			con.commit();
-			return true;
+			return userID;
 		} catch (java.sql.SQLException e) {
 			System.err.println(e.getMessage());
 			try {
@@ -87,8 +90,33 @@ public class UserDao {
 					System.err.println(e.getMessage());
 				}
 			}
-			return false;
+			return -1;
 		}
+	}
+	
+	public User getAddressForUser(Integer userID) throws SQLException {
+	    User user = new User();
+
+	    Connection con = DBConnect.Connect();
+	    if(con == null) return user;
+
+	    PreparedStatement ps = con.prepareStatement("SELECT AddressLineOne, City, State, ZipCode FROM users WHERE UserID = ?");
+	    ps.setInt(1, userID);
+	    
+	    ResultSet rs = ps.executeQuery();
+	    
+	    if (rs.next()) {
+	        user.setAddress(rs.getString("AddressLineOne"));
+	        user.setCity(rs.getString("City"));
+	        user.setState(rs.getString("State"));
+	        user.setZipcode(rs.getString("ZipCode"));
+	    }
+
+	    rs.close();
+	    ps.close();
+	    con.close();
+
+	    return user;
 	}
 
 	public Float getUserTaxRate(int userID) {

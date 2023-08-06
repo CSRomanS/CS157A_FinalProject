@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Database.CartDao;
+import Database.ItemDao;
 import entity.CartItem;
 import entity.Item;
 
@@ -23,6 +24,8 @@ public class PlaceOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private CartDao cDao = new CartDao(); 
+	
+	private ItemDao iDao = new ItemDao();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -58,13 +61,13 @@ public class PlaceOrderServlet extends HttpServlet {
 			CartItem cartItem = new CartItem();
 			cartItem.setUserID(userID);
 			cartItem.setItemCount(Integer.parseInt(itemCounts[i]));
-			Item item = new Item();
-			item.setItemID(Integer.parseInt(itemIDs[i]));
+			Item item = iDao.getItem(Integer.parseInt(itemIDs[i]));
+			cartItem.setItem(item);
 			ci.add(cartItem);
 		}
 		
 		cDao.placeOrder(userID, ci);
-		//TODO
+		//TODO Redirect to order page
 	}
 
 }
