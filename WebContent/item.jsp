@@ -203,6 +203,7 @@
 					<span class="unuseful-vote-count">${review.unHelpfulCount}</span>
 					people found this unUseful.
 				</div>
+				
 				<br />
 				<br />
 			</c:forEach>
