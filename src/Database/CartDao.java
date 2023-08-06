@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class CartDao {
 		try {
 			Statement statement = con.createStatement();
 			statement.executeQuery(
-					"SELECT s.UserID, s.ItemID, s.ItemCount, i.ItemName, i.CategoryDescription, i.Price, i.CoverPicture, i.Stock FROM shoppingcarts s, items i WHERE i.ItemID = s.ItemID AND s.UserID = "
+					"SELECT s.UserID, s.ItemID, s.ItemCount, i.ItemName, i.CategoryDescription, i.Price, i.CoverPicture, i.Stock, i.SalePrice, i.SaleEnds FROM shoppingcarts s, items i WHERE i.ItemID = s.ItemID AND s.UserID = "
 							+ userID + ";");
 			ResultSet rs = statement.getResultSet();
 			while (rs.next()) {
@@ -44,6 +45,16 @@ public class CartDao {
 				i.setPrice(rs.getFloat(6));
 				i.setCoverPicture(rs.getString(7));
 				i.setStock(rs.getInt(8));
+				
+				Timestamp saleEnds = rs.getTimestamp(10);
+				Timestamp now = new Timestamp(System.currentTimeMillis());
+
+				if (saleEnds == null || saleEnds.before(now)) {
+				    i.setSalePrice(null);
+				} else {
+				    i.setSalePrice(rs.getFloat(9));
+				}
+				
 				c.setItem(i);
 				cItems.add(c);
 				
@@ -68,9 +79,14 @@ public class CartDao {
 	        // Start a transaction
 	        con.setAutoCommit(false);
 
+	        
 	        // 1. Calculate the total cost and taxes
 	        float totalCost = 0;
 	        for (CartItem cartItem : cartItems) {
+	        	// check if it's on sale
+	        	if(cartItem.getItem().getSalePrice() != null) {
+	        		cartItem.getItem().setPrice(cartItem.getItem().getSalePrice());
+	        	}
 	            totalCost += cartItem.getItemCount() * cartItem.getItem().getPrice();
 	        }
 

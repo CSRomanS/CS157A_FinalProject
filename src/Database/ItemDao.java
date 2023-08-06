@@ -3,6 +3,7 @@ package Database;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,17 @@ public class ItemDao {
 				item.setMainDescription(rs.getString(3));
 				item.setCategoryDescription(rs.getString(4));
 				item.setPrice(rs.getFloat(5));
-				item.setSalePrice(rs.getFloat(6));
-				item.setSaleEnds(rs.getDate(7));
+				item.setSaleEnds(rs.getTimestamp(7));
+				
+				Timestamp saleEnds = rs.getTimestamp(7); 
+				Timestamp now = new Timestamp(System.currentTimeMillis());
+
+				if (saleEnds == null || saleEnds.before(now)) {
+				    item.setSalePrice(null);
+				} else {
+				    item.setSalePrice(rs.getFloat(6));
+				}
+				
 				item.setScheduledPrice(rs.getFloat(8));
 				item.setStock(rs.getInt(9));
 				item.setCoverPicture(rs.getString(10));

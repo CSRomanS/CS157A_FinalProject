@@ -29,8 +29,8 @@
 	 function voteUseful(buttonElement) {
 		 
 		 const userID = '<%=request.getSession().getAttribute("userID")%>';
-		 
-		 console.log("UserID:", userID);
+
+		console.log("UserID:", userID);
 
 		if (!userID || userID === "null" || userID.trim() === "") {
 			alert('You must be logged in to vote.');
@@ -38,7 +38,7 @@
 		}
 		const reviewID = buttonElement.getAttribute('data-review-id');
 		// Print the userID to the console for debugging
-	    console.log("reviewID:", reviewID);
+		console.log("reviewID:", reviewID);
 
 		// Send a request to your server to register the vote
 		// Here's an example using jQuery:
@@ -56,9 +56,9 @@
 							'.useful-vote-count');
 					const newCount = parseInt(voteCountElement.text()) + 1;
 					voteCountElement.text(newCount);
-					
+
 					// Disable the button
-	                $(buttonElement).prop('disabled', true).text('Voted');
+					$(buttonElement).prop('disabled', true).text('Voted');
 				} else {
 					alert(response.message);
 				}
@@ -147,11 +147,22 @@
 			</div>
 			<div class="x-price">
 				<span>$</span>
-				<div class="x-price_num">${item.price}</div>
+				<c:choose>
+					<c:when test="${item.salePrice != null}">
+						<div class="x-price_num">
+							<strike>${item.price}</strike> ${item.salePrice}
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="x-price_num">${item.price}</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="x-action">
 				<div class="liji">
-					<a href="<%=request.getContextPath()%>/addToCart?itemID=${item.itemID}">Add to Cart</a>
+					<a
+						href="<%=request.getContextPath()%>/addToCart?itemID=${item.itemID}">Add
+						to Cart</a>
 				</div>
 			</div>
 		</div>
@@ -179,8 +190,8 @@
 					<span class="useful-vote-count">${review.helpful}</span> people
 					found this useful.
 				</div>
-				<br/>
-				<br/>
+				<br />
+				<br />
 			</c:forEach>
 		</div>
 	</div>
