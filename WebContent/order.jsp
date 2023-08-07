@@ -64,10 +64,6 @@ function submitReview() {
         alert("Review text cannot be empty.");
         return;
     }
-    if (!reviewPicURL.trim()) {
-        alert("Review picture URL cannot be empty.");
-        return;
-    }
 
     $.ajax({
         url: './submitReview',
