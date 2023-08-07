@@ -1,6 +1,5 @@
-import Database.DBConnect;
-import Database.DBAccess;
-import java.sql.Connection;
+import Database.WishListDao;
+
 public class Main {
     public static void main(String[] args) {
         try {
@@ -14,6 +13,12 @@ public class Main {
             //DBAccess.removeFromCart(1, 2);
             //DBAccess.addToWishList(1, 4);
             //DBAccess.removeFromWishList(1, 4);
+            /*
+            WishListDao wl = new WishListDao();
+            wl.removeWishListById(1, 3);
+            System.out.println(wl.getWishListByUserID(1));
+            */
+
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
