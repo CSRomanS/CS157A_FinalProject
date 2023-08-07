@@ -198,7 +198,10 @@
 			<c:forEach var="review" items="${item.reviews}">
 				<div class="review">
 					<div class="star-rating">Rating: ${review.starRating}</div>
-					<div class="review-text">Comment: ${review.reviewText}</div>
+					<c:if test="${not empty review.reviewText}">
+							<div class="review-text">Comment: ${review.reviewText}</div>
+					</c:if>
+					
 					<div class="review-author">Reviewed by: ${review.authorName}</div>
 					<div class="review-author">Date: ${review.reviewTime}</div>
 					<c:if test="${not empty review.picture}">

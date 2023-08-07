@@ -60,10 +60,6 @@ function submitReview() {
         alert("Please select a star rating.");
         return;
     }
-    if (!reviewText.trim()) {
-        alert("Review text cannot be empty.");
-        return;
-    }
 
     $.ajax({
         url: './submitReview',
