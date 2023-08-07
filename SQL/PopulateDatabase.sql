@@ -15,7 +15,7 @@ VALUES
 
 INSERT INTO Items (`ItemID`, `ItemName`, `MainDescription`, `CategoryDescription`, `Price`, `SalePrice`, `SaleEnds`, `ScheduledPrice`, `Stock`, `CoverPicture`, `CategoryID`) 
 VALUES 
-	('5', 'Tide Stain Remover', "Powerful solution breaks stains down; microfiber pad lifts and absorbs them; Doesn't contain bleach.", 'Tide to Go is the portable, instant stain remover that helps eliminate many fresh food and drink stains on the spot.', '7.88', '5.00', '2023-08-01 00:00:00', '7.00', 100, 'https://m.media-amazon.com/images/I/815jQzfsMmL._AC_SL1500_.jpg', '3');
+	('5', 'Tide Stain Remover', "Powerful solution breaks stains down; microfiber pad lifts and absorbs them; Doesn't contain bleach.", 'Tide to Go is the portable, instant stain remover that helps eliminate many fresh food and drink stains on the spot.', '7.88', '5.00', '2023-09-01 00:00:00', '7.00', 100, 'https://m.media-amazon.com/images/I/815jQzfsMmL._AC_SL1500_.jpg', '3');
     
 INSERT INTO Items (`ItemID`, `ItemName`, `MainDescription`, `CategoryDescription`, `Price`, `Stock`, `CoverPicture`, `CategoryID`) 
 VALUES 
