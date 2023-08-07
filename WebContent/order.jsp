@@ -208,8 +208,11 @@ button:hover {
 							<table>
 								<c:forEach var="orderItem" items="${order.orderItems}">
 									<tr>
-										<td><img src="${orderItem.item.coverPicture}"
-											alt="${orderItem.item.itemName}" width="50"></td>
+										<td><a
+											href="<%=request.getContextPath()%>/detail?itemID=${orderItem.item.itemID}">
+												<img src="${orderItem.item.coverPicture}"
+												alt="${orderItem.item.itemName}" width="50">
+										</a></td>
 										<td>${orderItem.item.itemName}</td>
 										<td>Quantity: ${orderItem.itemCount}</td>
 										<td>$${orderItem.itemCost}</td>

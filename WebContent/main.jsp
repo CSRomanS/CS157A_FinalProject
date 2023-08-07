@@ -33,7 +33,10 @@
 		<div class="head_sub">
 			<c:if test="${not empty username}">
 				<div class="welcome">
-					Welcome, <a class="welcome" href="<%=request.getContextPath()%>/order"><%=request.getSession().getAttribute("username")%></a>
+					  Welcome, <span><%=request.getSession().getAttribute("username")%></span> 
+				</div>
+				<div class="welcome">
+					 <a class="welcome" href="<%=request.getContextPath()%>/order">Orders</a>
 				</div>
 			</c:if>
 			<div class="cart">
@@ -55,10 +58,12 @@
 
 	<div class="search_bar">
 		<div class="search">
-			<input type="text" class="text">
-			<button>
-				<img src="images/search.png" width="40px">
-			</button>
+			<form action="<%=request.getContextPath()%>/searchPage" method="get">
+				<input type="text" class="text" name="keyword">
+				<button type="submit">
+					<img src="images/search.png" width="40px">
+				</button>
+			</form>
 		</div>
 	</div>
 	<div class="shop">
