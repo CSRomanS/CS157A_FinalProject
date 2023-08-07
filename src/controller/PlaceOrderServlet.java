@@ -67,7 +67,8 @@ public class PlaceOrderServlet extends HttpServlet {
 		}
 		
 		cDao.placeOrder(userID, ci);
-		//TODO Redirect to order page
+		
+		request.getRequestDispatcher("/order").forward(request, response);
 	}
 
 }

@@ -33,7 +33,7 @@
 		<div class="head_sub">
 			<c:if test="${not empty username}">
 				<div class="welcome">
-					Welcome, <a class="welcome" href="manage.jsp"><%=request.getSession().getAttribute("username")%></a>
+					Welcome, <a class="welcome" href="<%=request.getContextPath()%>/order"><%=request.getSession().getAttribute("username")%></a>
 				</div>
 			</c:if>
 			<div class="cart">

@@ -11,17 +11,23 @@ public class OrderItems {
 	
 	private Integer orderID;
 	
+	private Item item;
+	
 
 	public OrderItems() {
 	}
+	
 
-	public OrderItems(Integer itemID, Integer itemCount, Integer itemCost, Integer orderID) {
+	public OrderItems(Integer itemID, Integer itemCount, Integer itemCost, Integer orderID, Item item) {
 		super();
 		this.itemID = itemID;
 		this.itemCount = itemCount;
 		this.itemCost = itemCost;
 		this.orderID = orderID;
+		this.item = item;
 	}
+
+
 
 	public Integer getItemID() {
 		return itemID;
@@ -55,11 +61,21 @@ public class OrderItems {
 		this.orderID = orderID;
 	}
 
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderItems [itemID=" + itemID + ", itemCount=" + itemCount + ", itemCost=" + itemCost + ", orderID="
-				+ orderID + "]";
+				+ orderID + ", item=" + item + "]";
 	}
+	
+
 	
 	
 }
