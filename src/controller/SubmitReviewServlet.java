@@ -1,8 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,17 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Database.OrderDao;
-import entity.Order;
+import Database.ReviewDao;
+import entity.Util;
 
 /**
- * Servlet implementation class OrderServlet
+ * Servlet implementation class SubmitReviewServlet
  */
-@WebServlet("/order")
-public class OrderServlet extends HttpServlet {
+@WebServlet("/submitReview")
+public class SubmitReviewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	private OrderDao oDao = new OrderDao();
+	
+	private ReviewDao rDao = new ReviewDao(); 
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -33,14 +32,20 @@ public class OrderServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(false); // false means don't create a new session if one doesn't exist
 
 		Integer userID = (Integer) session.getAttribute("userID");
+		Integer itemID = Integer.valueOf(request.getParameter("itemID"));
+		Integer starRating = Integer.valueOf(request.getParameter("starRating"));
+		String reviewText = request.getParameter("reviewText");
+		String reviewPicURL = request.getParameter("reviewPicURL");
 		
-		List<Order> orders = oDao.getOrderList(userID);	
-		
-		request.setAttribute("orderList", orders);
-		request.getRequestDispatcher("/order.jsp").forward(request, response);
+		boolean flag = rDao.createReview(starRating, reviewText, reviewPicURL, userID, itemID);
+		if(flag) {
+			Util.respondWithSuccess(response);
+		} else {
+			Util.respondWithError("You've already reviewed this item.", response);
+		}
 		
 	}
 

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 import Database.ReviewDao;
+import entity.Util;
 
 /**
  * Servlet implementation class voteUseful
@@ -45,40 +46,15 @@ public class VoteUsefulServlet extends HttpServlet {
 
 		// Check if this user has already voted for this review
 		if (rDao.checkIfUserHasVoted(userID, reviewID)) {
-			respondWithError("You have already voted for this review.", response);
+			Util.respondWithError("You have already voted for this review.", response);
 			return;
 		}
 
 		// If not, record the vote and update the review_votes table
 		rDao.voteUseful(userID, reviewID, helpful);
 		
-		respondWithSuccess(response);
+		Util.respondWithSuccess(response);
 		
-	}
-
-	private void respondWithError(String message, HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-
-		JSONObject jsonResponse = new JSONObject();
-		jsonResponse.put("success", false);
-		jsonResponse.put("message", message);
-
-		PrintWriter out = response.getWriter();
-		out.write(jsonResponse.toString());
-		out.close();
-	}
-
-	private void respondWithSuccess(HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-
-		JSONObject jsonResponse = new JSONObject();
-		jsonResponse.put("success", true);
-
-		PrintWriter out = response.getWriter();
-		out.write(jsonResponse.toString());
-		out.close();
 	}
 
 }
