@@ -38,6 +38,9 @@
 				<div class="welcome">
 					 <a class="welcome" href="<%=request.getContextPath()%>/order">Orders</a>
 				</div>
+				<div class="welcome">
+					 <a class="welcome" href="<%=request.getContextPath()%>/wishlist">WishList</a>
+				</div>
 			</c:if>
 			<div class="cart">
 				<a href="<%=request.getContextPath()%>/cart"

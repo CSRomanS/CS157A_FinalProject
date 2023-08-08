@@ -9,9 +9,7 @@
 <script src="js/jquery-3.6.0.js" type="text/javascript"
 	charset="ISO-8859-1"></script>
 <script>
-	var taxRate =
-<%=session.getAttribute("taxRate")%>
-	;
+	var taxRate = <%=session.getAttribute("taxRate")%>;
 	$(document)
 			.ready(
 					function() {
@@ -165,7 +163,11 @@
 					<div class="c-sum_num">${cart.item.price}</div>
 				</div>
 				<div class="cell c-action">
-					<a href="#" class="remove">Remove</a>
+					<form action="<%=request.getContextPath()%>/removeCartItem"
+						method="post">
+						<input type="hidden" name="itemID" value="${cart.item.itemID}" />
+						<button type="submit" class="remove">Remove</button>
+					</form>
 				</div>
 			</div>
 

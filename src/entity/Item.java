@@ -29,6 +29,8 @@ private Integer itemID;
 	
 	private int isFeatured;
 	
+	private Float itemRating;
+	
 	private List<String> photos;
 	
 	private List<Review> reviews;
@@ -38,7 +40,7 @@ private Integer itemID;
 
 	public Item(Integer itemID, String itemName, String mainDescription, String categoryDescription, Float price,
 			Float salePrice, Date saleEnds, Float scheduledPrice, Integer stock, String coverPicture,
-			Integer categoryID, int isFeatured, List<String> photos, List<Review> reviews) {
+			Integer categoryID, int isFeatured, Float itemRating, List<String> photos, List<Review> reviews) {
 		super();
 		this.itemID = itemID;
 		this.itemName = itemName;
@@ -52,6 +54,7 @@ private Integer itemID;
 		this.coverPicture = coverPicture;
 		this.categoryID = categoryID;
 		this.isFeatured = isFeatured;
+		itemRating = itemRating;
 		this.photos = photos;
 		this.reviews = reviews;
 	}
@@ -151,8 +154,14 @@ private Integer itemID;
 	public void setIsFeatured(int isFeatured) {
 		this.isFeatured = isFeatured;
 	}
-	
-	
+
+	public Float getItemRating() {
+		return itemRating;
+	}
+
+	public void setItemRating(Float itemRating) {
+		this.itemRating = itemRating;
+	}
 
 	public List<String> getPhotos() {
 		return photos;
@@ -161,8 +170,6 @@ private Integer itemID;
 	public void setPhotos(List<String> photos) {
 		this.photos = photos;
 	}
-	
-	
 
 	public List<Review> getReviews() {
 		return reviews;
@@ -178,8 +185,9 @@ private Integer itemID;
 				+ ", categoryDescription=" + categoryDescription + ", price=" + price + ", salePrice=" + salePrice
 				+ ", saleEnds=" + saleEnds + ", scheduledPrice=" + scheduledPrice + ", stock=" + stock
 				+ ", coverPicture=" + coverPicture + ", categoryID=" + categoryID + ", isFeatured=" + isFeatured
-				+ ", photos=" + photos + ", reviews=" + reviews + "]";
+				+ ", ItemRating=" + itemRating + ", photos=" + photos + ", reviews=" + reviews + "]";
 	}
 
+	
 
 }

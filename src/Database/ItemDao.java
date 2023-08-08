@@ -30,7 +30,7 @@ public class ItemDao {
 		try {
 			Statement statement = con.createStatement();
 			statement.executeQuery(
-					"SELECT ItemID, ItemName, MainDescription, CategoryDescription, Price, SalePrice, SaleEnds, ScheduledPrice, Stock, CoverPicture, CategoryID, IsFeatured, CoverPicture FROM items "
+					"SELECT ItemID, ItemName, MainDescription, CategoryDescription, Price, SalePrice, SaleEnds, ScheduledPrice, Stock, CoverPicture, CategoryID, IsFeatured, ItemRating FROM items "
 							+ "WHERE ItemID=" + itemID + ";");
 			ResultSet rs = statement.getResultSet();
 
@@ -56,6 +56,7 @@ public class ItemDao {
 				item.setCoverPicture(rs.getString(10));
 				item.setCategoryID(rs.getInt(11));
 				item.setIsFeatured(rs.getInt(12));
+				item.setItemRating(rs.getFloat(13));
 			}
 
 			// get item photos

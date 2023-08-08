@@ -200,5 +200,31 @@ public class CartDao {
 		}
 
 	}
+	
+	
+    public boolean removeFromCart(int userID, int itemID){
+        
+        boolean isDeleted = false;
+		Connection con = DBConnect.Connect();
+		if (con == null)
+			return false;
+		try {
+			String sql = "DELETE FROM shoppingcarts WHERE UserID=? AND ItemID=?";
+			PreparedStatement ps = con.prepareStatement(sql);
+
+			ps.setInt(1, userID);
+			ps.setInt(2, itemID);
+
+			int affectedRows = ps.executeUpdate();
+			ps.close();
+			con.close();
+			isDeleted = (affectedRows > 0);
+
+			return isDeleted;
+		} catch (java.sql.SQLException e) {
+			System.err.println(e.getMessage());
+			return isDeleted;
+		}
+    }
 
 }
