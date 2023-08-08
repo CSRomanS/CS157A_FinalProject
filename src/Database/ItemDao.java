@@ -186,7 +186,7 @@ public class ItemDao {
 				if (saleEnds == null || saleEnds.before(now)) {
 					item.setSalePrice(null);
 				} else {
-					item.setSalePrice(rs.getFloat(6));
+					item.setSalePrice(rs.getFloat("SalePrice"));
 				}
 				item.setSaleEnds(rs.getDate("SaleEnds"));
 				item.setScheduledPrice(rs.getFloat("ScheduledPrice"));
