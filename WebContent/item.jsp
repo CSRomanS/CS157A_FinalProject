@@ -31,12 +31,20 @@
 			return;
 		}
 	    const quantity = document.getElementById("quantity").value;
-	    console.log("itemID: " + itemID);
-	    console.log("Pre-URL itemID:", itemID, "Quantity:", quantity);
 	    
 	    const contextPath = '<%=request.getContextPath()%>';
 	    const url = contextPath + "/addToCart?itemID=" + itemID + "&quantity=" + quantity;
-	    console.log("Constructed URL:", url);
+	    
+	    window.location.href = url;
+	}
+	
+	function addToWishList(itemID) {
+		if(!goToCart()){
+			return;
+		}
+	    
+	    const contextPath = '<%=request.getContextPath()%>';
+	    const url = contextPath + "/addWishItem?itemID=" + itemID;
 	    
 	    window.location.href = url;
 	}
@@ -97,10 +105,13 @@
 		<div class="head_sub">
 			<c:if test="${not empty username}">
 				<div class="welcome">
-					  Welcome, <span><%=request.getSession().getAttribute("username")%></span> 
+					Welcome, <span><%=request.getSession().getAttribute("username")%></span>
 				</div>
 				<div class="welcome">
-					 <a class="welcome" href="<%=request.getContextPath()%>/order">Orders</a>
+					<a class="welcome" href="<%=request.getContextPath()%>/order">Orders</a>
+				</div>
+				<div class="welcome">
+					<a class="welcome" href="<%=request.getContextPath()%>/wishlist">WishList</a>
 				</div>
 			</c:if>
 			<div class="cart">
@@ -164,6 +175,9 @@
 			<div class="x-goodsname">
 				<h3>${item.itemName}</h3>
 			</div>
+			<div class="x-goodsname">
+				<h4>Rate: ${item.itemRating}</h4>
+			</div>
 			<div class="news">
 				<div class="">${item.categoryDescription}</div>
 			</div>
@@ -184,11 +198,17 @@
 				</c:choose>
 			</div>
 			<div class="x-action">
-				<label for="quantity">Quantity:</label>
-				<input type="number" id="quantity" name="quantity" min="1" value="1">
+				<label for="quantity">Quantity:</label> <input type="number"
+					id="quantity" name="quantity" min="1" value="1">
 				<div class="liji">
-					<a href="javascript:void(0);" onclick="addToCart(${item.itemID})">Add to Cart</a>
+					<a href="javascript:void(0);" onclick="addToCart(${item.itemID})">Add
+						to Cart</a>
 				</div>
+
+			</div>
+			<div class="x-action">
+					<a href="javascript:void(0);"
+						onclick="addToWishList(${item.itemID})">Add to Wishlist</a>
 			</div>
 		</div>
 		<div class="review-section">
@@ -199,9 +219,9 @@
 				<div class="review">
 					<div class="star-rating">Rating: ${review.starRating}</div>
 					<c:if test="${not empty review.reviewText}">
-							<div class="review-text">Comment: ${review.reviewText}</div>
+						<div class="review-text">Comment: ${review.reviewText}</div>
 					</c:if>
-					
+
 					<div class="review-author">Reviewed by: ${review.authorName}</div>
 					<div class="review-author">Date: ${review.reviewTime}</div>
 					<c:if test="${not empty review.picture}">
@@ -225,7 +245,7 @@
 					<span class="unuseful-vote-count">${review.unHelpfulCount}</span>
 					people found this unUseful.
 				</div>
-				
+
 				<br />
 				<br />
 			</c:forEach>
