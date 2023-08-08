@@ -8,17 +8,28 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class DBConnect {
+	
 	// connection URL
-	final static String host = "localhost";
-	final static String port = "3306";
-	final static String dbName = "AEB";
-	final static String mysqlURL = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
+	private static String url;
+	private static String username;
+	private static String password;
+	private static Properties pro = new Properties();
+	
+    static {
+        try{
 
-	// connection login
-	final static String username = "jdbcUser";
-	final static String password = "cs157a";
+            pro.load(DBConnect.class.getClassLoader().getResourceAsStream("jdbc.properties"));
+            url = pro.getProperty("m_url");
+            username = pro.getProperty("m_username");
+            password = pro.getProperty("m_password");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Returns a connection to the database. (Must be closed manually)
@@ -26,17 +37,11 @@ public class DBConnect {
 	 * @return a connection to the database.
 	 */
 	public static Connection Connect() {
-		// ensures the class is loaded
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException cnfe) {
-			System.out.println("Error loading driver: " + cnfe);
-		}
 
 		// Attempt connection
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(mysqlURL, username, password);
+			connection = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			System.out.println("Error connecting to database");
 			e.printStackTrace();
@@ -56,7 +61,7 @@ public class DBConnect {
 		}
 		// Attempt connection and run script
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port, username,
+			Connection connection = DriverManager.getConnection(url, username,
 					password);
 			Statement statement = connection.createStatement();
 
@@ -96,9 +101,10 @@ public class DBConnect {
 
 	/**
 	 * Close JDBC connection, includes Connection, Statement and Result set
+	 * 
 	 * @param con Connection
-	 * @param st Statement
-	 * @param rs ResultSet
+	 * @param st  Statement
+	 * @param rs  ResultSet
 	 */
 	public static void close(Connection con, Statement st, ResultSet rs) {
 
