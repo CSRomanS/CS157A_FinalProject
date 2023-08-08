@@ -167,21 +167,6 @@ CREATE TABLE IF NOT EXISTS Taxes(
     `Tax` DECIMAL(3,2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS ScheduledOrders(
-	`UserID` int NOT NULL,
-    `ItemID` int NOT NULL,
-    `ItemQuantity` int NOT NULL,
-  PRIMARY KEY(UserID, ItemID),
-  FOREIGN KEY (`UserID`)
-    REFERENCES Users (`UserID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (`ItemID`)
-    REFERENCES Items (`ItemID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-
 CREATE TRIGGER itemRatingUpdate AFTER INSERT ON Reviews FOR EACH ROW
 UPDATE Items i
 INNER JOIN(
