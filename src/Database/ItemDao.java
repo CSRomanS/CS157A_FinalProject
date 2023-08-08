@@ -180,7 +180,7 @@ public class ItemDao {
 				item.setCategoryDescription(rs.getString("CategoryDescription"));
 				item.setPrice(rs.getFloat("Price"));
 				
-				Timestamp saleEnds = rs.getTimestamp(7);
+				Timestamp saleEnds = rs.getTimestamp("saleEnds");
 				Timestamp now = new Timestamp(System.currentTimeMillis());
 
 				if (saleEnds == null || saleEnds.before(now)) {
