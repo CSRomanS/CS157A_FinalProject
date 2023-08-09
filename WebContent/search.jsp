@@ -13,8 +13,7 @@
 	charset="ISO-8859-1"></script>
 <script>
 	function goToCart() {
-    	const userID = '<%=request.getSession().getAttribute("userID")%>
-	';
+    	const userID = '<%=request.getSession().getAttribute("userID")%>';
 		if (!userID || userID === "null" || userID.trim() === "") {
 			alert('You must be logged in to view your cart.');
 			return false; // prevent redirection
